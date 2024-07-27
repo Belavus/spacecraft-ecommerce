@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart');
+const adminRoutes = require('./routes/admin'); // Import admin routes
 const User = require("./models/User");
 
 dotenv.config();
@@ -20,6 +21,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Function to create an initial admin user
 const createAdminUser = async () => {
     const adminEmail = 'admin@example.com';
     const adminPassword = 'Maksimka1!';
@@ -37,20 +39,23 @@ const createAdminUser = async () => {
     }
 };
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(async () => {
     console.log('Connected to MongoDB');
-    await createAdminUser();
+    await createAdminUser(); // Create an initial admin user
 }).catch((err) => {
     console.error('Error connecting to MongoDB', err);
 });
 
+// Define routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/admin', adminRoutes); // Use admin routes
 
 // Custom middleware to handle not found routes
 app.use((req, res, next) => {

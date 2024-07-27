@@ -5,6 +5,7 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const fetchUserProfile = async () => {
         const token = localStorage.getItem('token');
@@ -13,12 +14,13 @@ const UserProvider = ({ children }) => {
                 const { data } = await api.get('/auth/profile', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setUser(data);
+                setUser({...data, token});
             } catch (error) {
                 console.error('Failed to fetch user profile', error);
                 logout();
             }
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, loading }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,0 +1,54 @@
+const asyncHandler = require('express-async-handler');
+const User = require('../models/User');
+const Product = require('../models/Product');
+
+// Get all users
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+});
+
+// Delete user
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        await User.deleteOne({ _id: req.params.id });
+        res.json({ message: 'User removed' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// Add product
+const addProduct = asyncHandler(async (req, res) => {
+    const { name, price, description, imageUrl, videoUrl } = req.body;
+
+    const product = new Product({
+        name,
+        price,
+        description,
+        imageUrl,
+        videoUrl,
+        user: req.user._id,
+    });
+
+    const createdProduct = await product.save();
+    res.status(201).json(createdProduct);
+});
+
+// Delete product
+const deleteProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+        await Product.deleteOne({ _id: req.params.id });
+        res.json({ message: 'Product removed' });
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
+module.exports = { getUsers, deleteUser, addProduct, deleteProduct };

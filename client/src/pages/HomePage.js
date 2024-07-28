@@ -4,6 +4,7 @@ import { ProductContext } from '../contexts/ProductContext';
 import CanvasComponent from '../components/CanvasComponent';
 import Chat from '../components/Chat';
 import Statistics from '../components/Statistics';
+import {Grid} from "@mui/material";
 
 const HomePage = () => {
     const { user } = useContext(UserContext);

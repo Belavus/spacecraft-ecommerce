@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import api from '../services/api';
 import { TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
+import apiService from "../services/ApiService";
 
 const AdminPage = () => {
     const { user } = useContext(UserContext);
@@ -10,34 +11,30 @@ const AdminPage = () => {
     const [newUser, setNewUser] = useState({ name: '', email: '', password: '', isAdmin: false });
     const [newProduct, setNewProduct] = useState({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '' });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (user) {
-                try {
-                    const userRes = await api.get('/admin/users', {
-                        headers: { Authorization: `Bearer ${user.token}` }
-                    });
-                    setUsers(userRes.data);
 
-                    const productRes = await api.get('/products');
-                    setProducts(productRes.data);
-                } catch (error) {
-                    console.error('Failed to fetch data', error);
-                }
+    const fetchData = async () => {
+        if (user && user.token) {
+            try {
+                const userRes = await apiService.getUsers();
+                setUsers(userRes.data);
+
+                const productRes = await apiService.getProducts();
+                setProducts(productRes.data);
+            } catch (error) {
+                console.error('Failed to fetch data', error);
             }
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchData();
-    }, [user]); // Объединенный useEffect для загрузки данных
+    }, [user]);
 
     const handleRegisterUser = async () => {
         try {
-            await api.post('/auth/register-admin', newUser, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
+            await apiService.registerAdmin(newUser);
             setNewUser({ name: '', email: '', password: '', isAdmin: false });
-            const res = await api.get('/admin/users', {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
+            const res = await apiService.getUsers();
             setUsers(res.data);
         } catch (error) {
             console.error('Failed to register user', error);
@@ -46,12 +43,8 @@ const AdminPage = () => {
 
     const handleDeleteUser = async (userId) => {
         try {
-            await api.delete(`/admin/users/${userId}`, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-            const res = await api.get('/admin/users', {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
+            await apiService.deleteUser(userId);
+            const res = await apiService.getUsers();
             setUsers(res.data);
         } catch (error) {
             console.error('Failed to delete user', error);
@@ -60,11 +53,9 @@ const AdminPage = () => {
 
     const handleAddProduct = async () => {
         try {
-            await api.post('/admin/products', newProduct, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
+            await apiService.addProduct(newProduct);
             setNewProduct({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '' });
-            const res = await api.get('/products');
+            const res = await apiService.getProducts();
             setProducts(res.data);
         } catch (error) {
             console.error('Failed to add product', error);
@@ -72,12 +63,9 @@ const AdminPage = () => {
     };
 
     const handleDeleteProduct = async (productId) => {
-        console.log(user);
         try {
-            await api.delete(`/admin/products/${productId}`, {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
-            const res = await api.get('/products');
+            await apiService.deleteProduct(productId);
+            const res = await apiService.getProducts();
             setProducts(res.data);
         } catch (error) {
             console.error('Failed to delete product', error);
@@ -137,7 +125,7 @@ const AdminPage = () => {
             <div>
                 <Typography variant="h6">Products</Typography>
                 <TableContainer component={Paper}>
-                    <Table>
+                    <Table >
                         <TableHead>
                             <TableRow>
                                 <TableCell>Name</TableCell>

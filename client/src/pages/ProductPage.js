@@ -1,16 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ProductContext } from '../contexts/ProductContext';
-import VideoPlayer from '../components/VideoPlayer';
-import { useEffect, useState } from 'react';
 import apiService from '../services/ApiService';
-import { Container, Card, CardContent, CardMedia, Typography, CircularProgress } from '@mui/material';
-
+import { Container, Card, CardContent, CardMedia, Typography, CircularProgress, Button } from '@mui/material';
 
 const ProductPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [quantity] = useState(1); // Default quantity to 1, you can change this to allow user input
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -25,6 +22,16 @@ const ProductPage = () => {
         };
         fetchProduct();
     }, [id]);
+
+    const handleAddToCart = async () => {
+        try {
+            await apiService.addToCart({ productId: product._id, quantity });
+            alert('Product added to cart');
+        } catch (error) {
+            console.error('Failed to add product to cart', error);
+            alert('Failed to add product to cart');
+        }
+    };
 
     if (loading) {
         return <CircularProgress />;
@@ -64,6 +71,9 @@ const ProductPage = () => {
                             </video>
                         </div>
                     )}
+                    <Button variant="contained" color="primary" onClick={handleAddToCart} style={{ marginTop: '16px' }}>
+                        Add to Cart
+                    </Button>
                 </CardContent>
             </Card>
         </Container>
@@ -71,4 +81,3 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
-

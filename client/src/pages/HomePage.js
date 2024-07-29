@@ -4,12 +4,14 @@ import { ProductContext } from '../contexts/ProductContext';
 import CanvasComponent from '../components/CanvasComponent';
 import Chat from '../components/Chat';
 import Statistics from '../components/Statistics';
-import {Grid} from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import Button from "@mui/material/Button";
 
 const HomePage = () => {
     const { user } = useContext(UserContext);
     const { products, loading, error } = useContext(ProductContext);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -33,6 +35,12 @@ const HomePage = () => {
     return (
         <div>
             <h1>Home Page</h1>
+            <Button variant="contained" color="primary" onClick={()=>{navigate('/products')}}>
+                Products
+            </Button>
+            <Button variant="contained" color="primary" onClick={()=>{navigate('/admin')}}>
+                Admin
+            </Button>
             {isAuthenticated ? (
                 <div>
                     <p>Welcome, {user ? user.name : 'User'}!</p>

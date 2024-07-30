@@ -6,11 +6,14 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import { CartContext } from '../contexts/CartContext';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
+import Badge from '@mui/material/Badge';
 
 const Header = () => {
     const { user, logout } = useContext(UserContext);
+    const { cartItemCount } = useContext(CartContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -19,7 +22,7 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static" style={{ marginBottom: '0' }}>
+        <AppBar position="static" style={{ marginBottom: 0, width: '100%' }}>
             <Toolbar>
                 <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/">
                     <HomeIcon />
@@ -28,7 +31,9 @@ const Header = () => {
                     E-Commerce
                 </Typography>
                 <IconButton color="inherit" component={Link} to="/cart">
-                    <ShoppingCartIcon />
+                    <Badge badgeContent={cartItemCount} color="secondary">
+                        <ShoppingCartIcon />
+                    </Badge>
                 </IconButton>
                 {user ? (
                     <>

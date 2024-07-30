@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import apiService from '../services/ApiService';
 import { Container, Card, CardContent, CardMedia, Typography, CircularProgress, Button } from '@mui/material';
+import { CartContext } from '../contexts/CartContext';
 
 const ProductPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [quantity] = useState(1); // Default quantity to 1, you can change this to allow user input
+    const { addToCart } = useContext(CartContext); // Используем CartContext для добавления товаров в корзину
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -25,7 +26,7 @@ const ProductPage = () => {
 
     const handleAddToCart = async () => {
         try {
-            await apiService.addToCart({ productId: product._id, quantity });
+            await addToCart(product._id); // Добавляем товар в корзину через CartContext
             alert('Product added to cart');
         } catch (error) {
             console.error('Failed to add product to cart', error);

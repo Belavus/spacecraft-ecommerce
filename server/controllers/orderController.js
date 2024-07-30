@@ -30,7 +30,10 @@ const placeOrder = asyncHandler(async (req, res) => {
         await item.product.save();
     }
 
+    // clear cart from ordered products
+    cart.items = cart.items.filter(item => !item.isOrdered);
     await cart.save();
+
     res.status(201).json(order);
 });
 

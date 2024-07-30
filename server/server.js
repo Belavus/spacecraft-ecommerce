@@ -10,7 +10,8 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart');
-const adminRoutes = require('./routes/admin'); // Import admin routes
+const orderRoutes = require('./routes/order');
+const adminRoutes = require('./routes/admin');
 const User = require("./models/User");
 
 dotenv.config();
@@ -55,7 +56,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/admin', adminRoutes); // Use admin routes
+app.use('/api/order', orderRoutes);
+app.use('/api/admin', adminRoutes); //
 
 // Custom middleware to handle not found routes
 app.use((req, res, next) => {

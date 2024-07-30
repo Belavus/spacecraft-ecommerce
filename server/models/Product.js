@@ -4,6 +4,7 @@ const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     price: {
         type: Number,
@@ -20,7 +21,11 @@ const productSchema = mongoose.Schema({
     },
     videoUrl: {
         type: String,
-        required: false,
+    },
+    orderCount: {
+        type: Number,
+        required: true,
+        default: 0,
     },
 }, {
     timestamps: true,

@@ -25,17 +25,27 @@ const deleteUser = asyncHandler(async (req, res) => {
 const addProduct = asyncHandler(async (req, res) => {
     const { name, price, description, imageUrl, videoUrl } = req.body;
 
-    const product = new Product({
-        name,
-        price,
-        description,
-        imageUrl,
-        videoUrl,
-        user: req.user._id,
-    });
+    try {
+        const product = new Product({
+            name,
+            price,
+            description,
+            imageUrl,
+            videoUrl,
+            user: req.user._id,
+        });
 
-    const createdProduct = await product.save();
-    res.status(201).json(createdProduct);
+        const createdProduct = await product.save();
+        res.status(201).json(createdProduct);
+    } catch (error) {
+        if (error.code === 11000) {
+            res.status(400);
+            throw new Error('Product name must be unique');
+        } else {
+            res.status(500);
+            throw new Error('Internal Server Error');
+        }
+    }
 });
 
 // Delete product

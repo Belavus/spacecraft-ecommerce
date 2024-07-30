@@ -6,20 +6,25 @@ import { UserContext } from '../contexts/UserContext';
 const CartPage = () => {
     const { user } = useContext(UserContext);
     const [cart, setCart] = useState(null);
+    const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCart = async () => {
+        const fetchCartAndOrders = async () => {
             try {
-                const res = await apiService.getCart();
-                setCart(res.data);
+                const [cartRes, ordersRes] = await Promise.all([
+                    apiService.getCart(),
+                    apiService.getOrders(),
+                ]);
+                setCart(cartRes.data);
+                setOrders(ordersRes.data);
                 setLoading(false);
             } catch (error) {
-                console.error('Failed to fetch cart', error);
+                console.error('Failed to fetch cart and orders', error);
                 setLoading(false);
             }
         };
-        fetchCart();
+        fetchCartAndOrders();
     }, [user]);
 
     const handleRemoveItem = async (productId) => {
@@ -29,6 +34,20 @@ const CartPage = () => {
             setCart(res.data);
         } catch (error) {
             console.error('Failed to remove item from cart', error);
+        }
+    };
+
+    const handlePlaceOrder = async () => {
+        try {
+            await apiService.placeOrder();
+            const res = await apiService.getCart();
+            setCart(res.data);
+            const ordersRes = await apiService.getOrders();
+            setOrders(ordersRes.data);
+            alert('Order placed successfully');
+        } catch (error) {
+            console.error('Failed to place order', error);
+            alert('Failed to place order');
         }
     };
 
@@ -68,10 +87,49 @@ const CartPage = () => {
                                 <Typography variant="h6" color="text.primary">
                                     Price: ${item.product.price}
                                 </Typography>
+                                <Typography variant="h6" color={item.isOrdered ? 'primary' : 'secondary'}>
+                                    {item.isOrdered ? 'Ordered' : 'Not Ordered'}
+                                </Typography>
                             </CardContent>
                             <Button variant="contained" color="secondary" onClick={() => handleRemoveItem(item.product._id)}>
                                 Remove
                             </Button>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+            <Button variant="contained" color="primary" onClick={handlePlaceOrder} style={{ marginTop: '16px' }}>
+                Place Order
+            </Button>
+
+            <Typography variant="h4" gutterBottom style={{ marginTop: '32px' }}>
+                Your Orders
+            </Typography>
+            <Grid container spacing={4}>
+                {orders.map((order) => (
+                    <Grid item key={order._id} xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                    Order ID: {order._id}
+                                </Typography>
+                                {order.items.map((item) => (
+                                    <div key={item.product._id}>
+                                        <Typography variant="body1" color="textSecondary">
+                                            Product: {item.product.name}
+                                        </Typography>
+                                        <Typography variant="body1" color="textSecondary">
+                                            Quantity: {item.quantity}
+                                        </Typography>
+                                        <Typography variant="body1" color="textSecondary">
+                                            Price: ${item.product.price}
+                                        </Typography>
+                                    </div>
+                                ))}
+                                <Typography variant="body2" color="textSecondary">
+                                    Order Date: {new Date(order.createdAt).toLocaleDateString()}
+                                </Typography>
+                            </CardContent>
                         </Card>
                     </Grid>
                 ))}
@@ -81,31 +139,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-
-
-// import React, { useContext } from 'react';
-// import { CartContext } from '../contexts/CartContext';
-//
-// const CartPage = () => {
-//     const { cart, addToCart, removeFromCart } = useContext(CartContext);
-//
-//     return (
-//         <div>
-//             <h1>Cart</h1>
-//             {cart.length === 0 ? (
-//                 <p>Your cart is empty</p>
-//             ) : (
-//                 <ul>
-//                     {cart.map((item) => (
-//                         <li key={item._id}>
-//                             {item.name}
-//                             <button onClick={() => removeFromCart(item._id)}>Remove</button>
-//                         </li>
-//                     ))}
-//                 </ul>
-//             )}
-//         </div>
-//     );
-// };
-//
-// export default CartPage;

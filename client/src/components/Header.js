@@ -19,7 +19,7 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" style={{ marginBottom: '0' }}>
             <Toolbar>
                 <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/">
                     <HomeIcon />

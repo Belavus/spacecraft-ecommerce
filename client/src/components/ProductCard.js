@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardMedia, Typography, CardActions, Button } from '@mui/material';
+import React, {useState} from 'react';
+import {Card, CardContent, CardMedia, Typography, CardActions, Button, Box} from '@mui/material';
 
-const ProductCard = ({ product, onView, onAddToCart }) => {
+const ProductCard = ({product, onView, onAddToCart}) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
 
     const toggleDescription = () => {
@@ -37,21 +37,36 @@ const ProductCard = ({ product, onView, onAddToCart }) => {
                 <Button size="small" color="primary" onClick={toggleDescription}>
                     {showFullDescription ? 'Show Less' : 'Read More'}
                 </Button>
+
+                <Typography variant="body2" color="text.secondary">
+                    Engine Count: {product.engineCount}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Engine Type: {product.engineType}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Purpose: {product.purpose}
+                </Typography>
+
                 <Typography variant="h6" color="text.primary">
                     ${product.price}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {product.orderCount} sold
                 </Typography>
+
+
+
+
             </CardContent>
             <CardActions>
                 {onView && (
-                    <Button size="small" color="primary" onClick={() => onView(product._id)}>
+                    <Button sx={{boxShadow: 2}} size="small" color="primary" onClick={() => onView(product._id)}>
                         View
                     </Button>
                 )}
                 {onAddToCart && (
-                    <Button size="small" color="secondary" onClick={() => onAddToCart(product._id)}>
+                    <Button sx={{boxShadow: 1}} size="small" color="secondary" onClick={() => onAddToCart(product._id)}>
                         Add to Cart
                     </Button>
                 )}

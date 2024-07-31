@@ -1,6 +1,18 @@
 import React, {useEffect, useState, useContext} from 'react';
 import apiService from '../services/ApiService';
-import {Container, Grid, Typography, Autocomplete, TextField, Button} from '@mui/material';
+import {
+    Container,
+    Grid,
+    Typography,
+    Autocomplete,
+    TextField,
+    Button,
+    Slider,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel
+} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import {CartContext} from '../contexts/CartContext';
@@ -8,7 +20,14 @@ import {CartContext} from '../contexts/CartContext';
 const AllProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [filters, setFilters] = useState({engineCount: null, engineType: null, purpose: null});
+    const [filters, setFilters] = useState({
+        engineCount: null,
+        engineType: null,
+        purpose: null,
+        searchQuery: '',
+        priceRange: [0, 10000],
+        sortOrder: 'asc'
+    });
     const [uniqueValues, setUniqueValues] = useState({engineCounts: [], engineTypes: [], purposes: []});
     const navigate = useNavigate();
     const {addToCart} = useContext(CartContext);
@@ -46,76 +65,128 @@ const AllProductsPage = () => {
     };
 
     const applyFilters = () => {
-        setFilteredProducts(products.filter(product => {
+        let filtered = products.filter(product => {
+            const matchesSearchQuery = product.name.toLowerCase().includes(filters.searchQuery.toLowerCase()) || product.description.toLowerCase().includes(filters.searchQuery.toLowerCase());
+            const matchesPriceRange = product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1];
             return (
+                matchesSearchQuery &&
+                matchesPriceRange &&
                 (filters.engineCount === null || product.engineCount === filters.engineCount) &&
                 (filters.engineType === null || product.engineType === filters.engineType) &&
                 (filters.purpose === null || product.purpose === filters.purpose)
             );
-        }));
+        });
+
+        if (filters.sortOrder === 'asc') {
+            filtered = filtered.sort((a, b) => a.price - b.price);
+        } else if (filters.sortOrder === 'desc') {
+            filtered = filtered.sort((a, b) => b.price - a.price);
+        }
+
+        setFilteredProducts(filtered);
     };
 
     const resetFilters = () => {
-        setFilters({engineCount: null, engineType: null, purpose: null});
+        setFilters({
+            engineCount: null,
+            engineType: null,
+            purpose: null,
+            searchQuery: '',
+            priceRange: [0, 1000],
+            sortOrder: 'asc'
+        });
         setFilteredProducts(products);
     };
 
     return (
-        <Container>
-            <Typography variant="h4" gutterBottom>
-                All Products
-            </Typography>
-            <div style={{display: 'flex'}}>
-                <div style={{width: '300px', marginRight: '16px', position: 'fixed', top: '80px', left: '16px'}}>
-                    <Autocomplete
-                        id="engineCount"
-                        options={uniqueValues.engineCounts}
-                        getOptionLabel={(option) => option.toString()}
-                        value={filters.engineCount}
-                        onChange={(event, newValue) => handleFilterChange('engineCount', newValue)}
-                        renderInput={(params) => <TextField {...params} label="Engine Count" variant="outlined"/>}
-                        style={{marginBottom: '16px'}}
-                    />
-                    <Autocomplete
-                        id="engineType"
-                        options={uniqueValues.engineTypes}
-                        getOptionLabel={(option) => option}
-                        value={filters.engineType}
-                        onChange={(event, newValue) => handleFilterChange('engineType', newValue)}
-                        renderInput={(params) => <TextField {...params} label="Engine Type" variant="outlined"/>}
-                        style={{marginBottom: '16px'}}
-                    />
-                    <Autocomplete
-                        id="purpose"
-                        options={uniqueValues.purposes}
-                        getOptionLabel={(option) => option}
-                        value={filters.purpose}
-                        onChange={(event, newValue) => handleFilterChange('purpose', newValue)}
-                        renderInput={(params) => <TextField {...params} label="Purpose" variant="outlined"/>}
-                        style={{marginBottom: '16px'}}
-                    />
-                        <Button sx={{width:'300px'}} variant="contained" color="primary" onClick={applyFilters}
-                                style={{marginBottom: '16px'}}>
-                            Apply Filters
-                        </Button>
-                        <Button sx={{width:'300px'}} variant="contained" color="secondary" onClick={resetFilters}>
-                            Reset Filters
-                        </Button>
-
-                </div>
-                <div style={{flexGrow: 1}}>
-                    <Grid container spacing={3}>
-                        {filteredProducts.map((product) => (
-                            <Grid item key={product._id} xs={12} sm={6} md={4}>
-                                <ProductCard
-                                    product={product}
-                                    onView={handleViewProduct}
-                                    onAddToCart={addToCart}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </div>
+        <Container style={{display: 'flex', flexDirection: 'row', flexGrow: 1}}>
+            <div style={{
+                width: '300px',
+                marginRight: '16px',
+                marginTop: '20px',
+                position: 'fixed',
+                top: '80px',
+                left: '16px'
+            }}>
+                <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={filters.searchQuery}
+                    onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
+                    style={{marginBottom: '16px', width: '100%'}}
+                />
+                <Autocomplete
+                    id="engineCount"
+                    options={uniqueValues.engineCounts}
+                    getOptionLabel={(option) => option.toString()}
+                    value={filters.engineCount}
+                    onChange={(event, newValue) => handleFilterChange('engineCount', newValue)}
+                    renderInput={(params) => <TextField {...params} label="Engine Count" variant="outlined"/>}
+                    style={{marginBottom: '16px'}}
+                />
+                <Autocomplete
+                    id="engineType"
+                    options={uniqueValues.engineTypes}
+                    getOptionLabel={(option) => option}
+                    value={filters.engineType}
+                    onChange={(event, newValue) => handleFilterChange('engineType', newValue)}
+                    renderInput={(params) => <TextField {...params} label="Engine Type" variant="outlined"/>}
+                    style={{marginBottom: '16px'}}
+                />
+                <Autocomplete
+                    id="purpose"
+                    options={uniqueValues.purposes}
+                    getOptionLabel={(option) => option}
+                    value={filters.purpose}
+                    onChange={(event, newValue) => handleFilterChange('purpose', newValue)}
+                    renderInput={(params) => <TextField {...params} label="Purpose" variant="outlined"/>}
+                    style={{marginBottom: '16px'}}
+                />
+                <Typography gutterBottom>
+                    Price Range
+                </Typography>
+                <Slider
+                    value={filters.priceRange}
+                    onChange={(event, newValue) => handleFilterChange('priceRange', newValue)}
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={10000} // Adjust the max value according to your product prices
+                    style={{marginBottom: '16px'}}
+                />
+                <FormControl fullWidth style={{marginBottom: '16px'}}>
+                    <InputLabel id="sortOrder-label">Sort</InputLabel>
+                    <Select
+                        labelId="sortOrder-label"
+                        id="sortOrder"
+                        value={filters.sortOrder}
+                        label="Sort"
+                        onChange={(event) => handleFilterChange('sortOrder', event.target.value)}
+                    >
+                        <MenuItem value="asc">Price: Low to High</MenuItem>
+                        <MenuItem value="desc">Price: High to Low</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button variant="contained" color="primary" onClick={applyFilters}
+                        style={{marginBottom: '16px', width: '100%'}}>
+                    Apply Filters
+                </Button>
+                <Button variant="contained" color="secondary" onClick={resetFilters}
+                        style={{marginBottom: '16px', width: '100%'}}>
+                    Reset Filters
+                </Button>
+            </div>
+            <div style={{flexGrow: 1, marginLeft: '100px', marginRight: '20px', marginTop: '20px'}}>
+                <Grid container spacing={5}>
+                    {filteredProducts.map((product) => (
+                        <Grid item key={product._id} xs={12} sm={6} md={4}>
+                            <ProductCard
+                                product={product}
+                                onView={handleViewProduct}
+                                onAddToCart={addToCart}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
             </div>
         </Container>
     );

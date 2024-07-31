@@ -58,6 +58,18 @@ const ProductPage = () => {
                     <Typography variant="body1" color="textSecondary">
                         {product.description}
                     </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Engine Count: {product.engineCount}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Engine Type: {product.engineType}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Purpose: {product.purpose}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        {product.orderCount} sold
+                    </Typography>
                     <Typography variant="h6" color="textPrimary" style={{ marginTop: '16px' }}>
                         Price: ${product.price}
                     </Typography>
@@ -66,10 +78,15 @@ const ProductPage = () => {
                             <Typography variant="h6" color="textPrimary">
                                 Product Video
                             </Typography>
-                            <video width="100%" controls>
-                                <source src={product.videoUrl} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
+                            <iframe
+                                width="100%"
+                                height="315"
+                                src={`https://www.youtube.com/embed/${product.videoUrl}`}
+                                title={product.name}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
                         </div>
                     )}
                     <Button variant="contained" color="primary" onClick={handleAddToCart} style={{ marginTop: '16px' }}>

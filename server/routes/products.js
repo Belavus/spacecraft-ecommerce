@@ -6,6 +6,7 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
+    getUniqueProductValues,
 } = require('../controllers/productController');
 
 router.route('/')
@@ -16,5 +17,6 @@ router.route('/:id')
     .get(getProductById)
     .put(updateProduct)
     .delete(deleteProduct);
+router.route('/unique/values').get(getUniqueProductValues);
 
 module.exports = router;

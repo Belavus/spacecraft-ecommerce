@@ -61,6 +61,10 @@ class ApiService {
         return this.api.get(`/products/${id}`);
     }
 
+    getUniqueProductValues() {  // to get unique values for filters
+        return this.api.get('/products/unique/values');
+    }
+
     // Cart endpoints
     addToCart(data) {
         return this.api.post('/cart', data);

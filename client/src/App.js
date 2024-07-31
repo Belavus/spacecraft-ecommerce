@@ -14,7 +14,8 @@ import AdminRoute from './components/AdminRoute';
 import { CartProvider } from './contexts/CartContext';
 import { UserProvider } from './contexts/UserContext';
 import { ProductProvider } from './contexts/ProductContext';
-import './index.css'
+// import './index.css'
+import './App.css'
 
 const App = () => {
     return (

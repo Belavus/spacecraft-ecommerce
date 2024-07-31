@@ -54,4 +54,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };
+// method to get unique values for filters
+const getUniqueProductValues = asyncHandler(async (req, res) => {
+    const engineCounts = await Product.distinct("engineCount");
+    const engineTypes = await Product.distinct("engineType");
+    const purposes = await Product.distinct("purpose");
+
+    res.json({ engineCounts, engineTypes, purposes });
+});
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, getUniqueProductValues };

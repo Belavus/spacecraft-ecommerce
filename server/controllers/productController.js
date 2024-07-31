@@ -17,19 +17,24 @@ const getProductById = asyncHandler(async (req, res) => {
 });
 
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, price, description } = req.body;
-    const product = new Product({ name, price, description });
+    const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
+    const product = new Product({ name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose });
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-    const { name, price, description } = req.body;
+    const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
     const product = await Product.findById(req.params.id);
     if (product) {
         product.name = name;
         product.price = price;
         product.description = description;
+        product.imageUrl = imageUrl;
+        product.videoUrl = videoUrl;
+        product.engineCount = engineCount;
+        product.engineType = engineType;
+        product.purpose = purpose;
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } else {

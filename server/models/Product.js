@@ -27,6 +27,18 @@ const productSchema = mongoose.Schema({
         required: true,
         default: 0,
     },
+    engineCount: {
+        type: Number,
+        required: false,
+    },
+    engineType: {
+        type: String,
+        required: false,
+    },
+    purpose: {
+        type: String,
+        required: false,
+    },
 }, {
     timestamps: true,
 });

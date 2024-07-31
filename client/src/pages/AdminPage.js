@@ -9,8 +9,7 @@ const AdminPage = () => {
     const [users, setUsers] = useState([]);
     const [products, setProducts] = useState([]);
     const [newUser, setNewUser] = useState({ name: '', email: '', password: '', isAdmin: false });
-    const [newProduct, setNewProduct] = useState({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '' });
-
+    const [newProduct, setNewProduct] = useState({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '', engineCount: 0, engineType: '', purpose: '' });
 
     const fetchData = async () => {
         if (user && user.token) {
@@ -54,7 +53,7 @@ const AdminPage = () => {
     const handleAddProduct = async () => {
         try {
             await apiService.addProduct(newProduct);
-            setNewProduct({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '' });
+            setNewProduct({ name: '', price: 0, description: '', imageUrl: '', videoUrl: '', engineCount: 0, engineType: '', purpose: '' });
             const res = await apiService.getProducts();
             setProducts(res.data);
         } catch (error) {
@@ -119,13 +118,16 @@ const AdminPage = () => {
                 <TextField label="Description" value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} />
                 <TextField label="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
                 <TextField label="Video URL" value={newProduct.videoUrl} onChange={(e) => setNewProduct({ ...newProduct, videoUrl: e.target.value })} />
+                <TextField label="Engine Count" type="number" value={newProduct.engineCount} onChange={(e) => setNewProduct({ ...newProduct, engineCount: parseInt(e.target.value) })} />
+                <TextField label="Engine Type" value={newProduct.engineType} onChange={(e) => setNewProduct({ ...newProduct, engineType: e.target.value })} />
+                <TextField label="Purpose" value={newProduct.purpose} onChange={(e) => setNewProduct({ ...newProduct, purpose: e.target.value })} />
                 <Button variant="contained" color="primary" onClick={handleAddProduct}>Add Product</Button>
             </div>
 
             <div>
                 <Typography variant="h6">Products</Typography>
                 <TableContainer component={Paper}>
-                    <Table >
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Name</TableCell>
@@ -133,6 +135,9 @@ const AdminPage = () => {
                                 <TableCell>Description</TableCell>
                                 <TableCell>Image URL</TableCell>
                                 <TableCell>Video URL</TableCell>
+                                <TableCell>Engine Count</TableCell>
+                                <TableCell>Engine Type</TableCell>
+                                <TableCell>Purpose</TableCell>
                                 <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
@@ -144,6 +149,9 @@ const AdminPage = () => {
                                     <TableCell>{product.description}</TableCell>
                                     <TableCell>{product.imageUrl}</TableCell>
                                     <TableCell>{product.videoUrl}</TableCell>
+                                    <TableCell>{product.engineCount}</TableCell>
+                                    <TableCell>{product.engineType}</TableCell>
+                                    <TableCell>{product.purpose}</TableCell>
                                     <TableCell>
                                         <Button variant="contained" color="secondary" onClick={() => handleDeleteProduct(product._id)}>Delete</Button>
                                     </TableCell>

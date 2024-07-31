@@ -23,7 +23,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 // Add product
 const addProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, imageUrl, videoUrl } = req.body;
+    const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
 
     try {
         const product = new Product({
@@ -32,6 +32,9 @@ const addProduct = asyncHandler(async (req, res) => {
             description,
             imageUrl,
             videoUrl,
+            engineCount,
+            engineType,
+            purpose,
             user: req.user._id,
         });
 

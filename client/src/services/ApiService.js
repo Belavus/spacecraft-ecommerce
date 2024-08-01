@@ -52,6 +52,10 @@ class ApiService {
         return this.api.delete(`/admin/products/${id}`);
     }
 
+    updateProduct(id, data) {
+        return this.api.put(`/admin/products/${id}`, data);
+    }
+
     // Product endpoints
     getProducts() {
         return this.api.get('/products');
@@ -59,10 +63,6 @@ class ApiService {
 
     getProductById(id) {
         return this.api.get(`/products/${id}`);
-    }
-
-    getUniqueProductValues() {  // to get unique values for filters
-        return this.api.get('/products/unique/values');
     }
 
     // Cart endpoints

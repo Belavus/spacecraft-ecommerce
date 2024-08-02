@@ -65,6 +65,10 @@ class ApiService {
         return this.api.get(`/products/${id}`);
     }
 
+    getUniqueProductValues() {  // New method
+        return this.api.get('/products/unique/values');
+    }
+
     // Cart endpoints
     addToCart(data) {
         return this.api.post('/cart', data);
@@ -89,6 +93,15 @@ class ApiService {
 
     getOrders() {
         return this.api.get('/order');
+    }
+
+    // HomePage endpoints
+    getHomePageInfo() {
+        return this.api.get('/homepage');
+    }
+
+    updateHomePageInfo(data) {
+        return this.api.put('/homepage', data);
     }
 }
 

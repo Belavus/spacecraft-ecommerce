@@ -12,6 +12,7 @@ const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/order');
 const adminRoutes = require('./routes/admin');
+const homePageRoutes = require('./routes/homePage');
 const User = require("./models/User");
 
 dotenv.config();
@@ -57,7 +58,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/order', orderRoutes);
-app.use('/api/admin', adminRoutes); //
+app.use('/api/admin', adminRoutes);
+app.use('/api/homepage', homePageRoutes);
 
 // Custom middleware to handle not found routes
 app.use((req, res, next) => {

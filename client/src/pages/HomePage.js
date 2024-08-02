@@ -1,19 +1,24 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../contexts/UserContext';
-import { ProductContext } from '../contexts/ProductContext';
+import React, {useContext, useEffect, useState} from 'react';
+import {UserContext} from '../contexts/UserContext';
+import {ProductContext} from '../contexts/ProductContext';
 import CanvasComponent from '../components/CanvasComponent';
 import Chat from '../components/Chat';
 import Statistics from '../components/Statistics';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Button from "@mui/material/Button";
 import Carousel from 'react-material-ui-carousel';
-import { Paper, Typography } from '@mui/material';
+import {Paper, Typography, Grid} from '@mui/material';
+import apiService from '../services/ApiService';
+import ProductCard from "../components/ProductCard";
+import {CartContext} from "../contexts/CartContext";
 
 const HomePage = () => {
-    const { user } = useContext(UserContext);
-    const { products, loading, error } = useContext(ProductContext);
+    const {user} = useContext(UserContext);
+    const {products, loading, error} = useContext(ProductContext);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [homePageInfo, setHomePageInfo] = useState({carouselImages: [], welcomeText: ''});
     const navigate = useNavigate();
+    const {addToCart} = useContext(CartContext);
 
     useEffect(() => {
         if (user) {
@@ -28,47 +33,73 @@ const HomePage = () => {
         }
     }, [user]);
 
+    useEffect(() => {
+        const fetchHomePageInfo = async () => {
+            try {
+                const res = await apiService.getHomePageInfo();
+                setHomePageInfo(res.data);
+            } catch (error) {
+                console.error('Failed to fetch home page info', error);
+            }
+        };
+
+        fetchHomePageInfo();
+    }, []);
+
+    const latestProducts = products.slice(-4);// 4 newest products
+
     // Пример данных для статистики
     const statsData = products.map(product => ({
         name: product.name,
-        value: Math.floor(Math.random() * 100)
+        value: product.orderCount
     }));
-
-    // Получение последних трех добавленных продуктов
-    const latestProducts = products.slice(-3);
 
     return (
         <div>
-            <h1>Home Page</h1>
-            <Button variant="contained" color="primary" onClick={()=>{navigate('/products')}}>
-                Products
-            </Button>
-            <Button variant="contained" color="primary" onClick={()=>{navigate('/admin')}}>
-                Admin
-            </Button>
             {isAuthenticated ? (
                 <div>
-                    <p>Welcome, {user ? user.name : 'User'}!</p>
-                    <h2>Latest Products</h2>
+
+                    <Carousel interval={5000}>
+                        {homePageInfo.carouselImages.map((image, index) => (
+                            <Paper key={index}>
+                                <img src={image} alt={`Carousel ${index}`}
+                                     style={{width: '100%', height: '300px', objectFit: 'cover'}}/>
+                            </Paper>
+                        ))}
+                    </Carousel>
+                    <Typography variant="h6" align="center" style={{marginTop: '10px'}}>
+                        {homePageInfo.welcomeText}
+                    </Typography>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                        <Button variant="contained" color="primary" onClick={() => {
+                            navigate('/products')
+                        }}>
+                            Browse Products
+                        </Button>
+                    </div>
+
+
+                    <h2>New Arrival</h2>
                     {loading ? (
                         <p>Loading...</p>
                     ) : error ? (
                         <p>{error}</p>
                     ) : (
-                        <Carousel interval={5000}>
+                        <Grid container spacing={3}>
                             {latestProducts.map((product) => (
-                                <Paper key={product._id}>
-                                    <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
-                                    <Typography variant="h6" align="center" style={{ marginTop: '10px' }}>
-                                        {product.name}
-                                    </Typography>
-                                </Paper>
+                                <Grid item key={product._id} xs={12} sm={6} md={3}>
+                                    <ProductCard
+                                        product={product}
+                                        onView={(id) => navigate(`/product/${id}`)}
+                                        onAddToCart={addToCart}
+                                    />
+                                </Grid>
                             ))}
-                        </Carousel>
+                        </Grid>
                     )}
-                    <CanvasComponent />
-                    <Chat />
-                    <Statistics data={statsData} />
+                    <CanvasComponent/>
+                    <Chat/>
+                    <Statistics data={statsData}/>
                 </div>
             ) : (
                 <p>Please log in to see the content.</p>

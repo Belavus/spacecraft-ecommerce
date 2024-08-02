@@ -37,7 +37,6 @@ const ProductCard = ({product, onView, onAddToCart}) => {
                 <Button size="small" color="primary" onClick={toggleDescription}>
                     {showFullDescription ? 'Show Less' : 'Read More'}
                 </Button>
-
                 <Typography variant="body2" color="text.secondary">
                     Engine Count: {product.engineCount}
                 </Typography>
@@ -47,17 +46,12 @@ const ProductCard = ({product, onView, onAddToCart}) => {
                 <Typography variant="body2" color="text.secondary">
                     Purpose: {product.purpose}
                 </Typography>
-
                 <Typography variant="h6" color="text.primary">
                     ${product.price}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {product.orderCount} sold
                 </Typography>
-
-
-
-
             </CardContent>
             <CardActions>
                 {onView && (

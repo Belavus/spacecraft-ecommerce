@@ -10,6 +10,8 @@ import {CartContext} from '../contexts/CartContext';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
 import Badge from '@mui/material/Badge';
+import logo from '../resources/logo.png'
+import theme from "../theme";
 
 const Header = () => {
     const {user, logout} = useContext(UserContext);
@@ -22,40 +24,31 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static" style={{marginBottom: 0, width: '100%'}}>
-            <Toolbar>
-                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/">
-                    <HomeIcon/>
+        <AppBar position="static" style={{ backgroundColor: theme.palette.background.main, marginBottom: 0, width: '100%' }}>
+            <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
+                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/" style={{ padding: 0 }}>
+                    <img src={logo} alt="Logo" style={{ height: '100%', maxHeight: '64px' }} /> {/* Изображение логотипа */}
                 </IconButton>
-                <Typography variant="h6" style={{flexGrow: 1}}>
-                    E-Commerce
-                </Typography>
-                <IconButton color="inherit" component={Link} to="/cart">
-                    <Badge badgeContent={cartItemCount} color="secondary">
-                        <ShoppingCartIcon/>
-                    </Badge>
-                </IconButton>
-                {user ? (
-                    <>
-                        <Typography variant="h6" style={{marginRight: '1rem'}}>
-                            {user.name}
-                        </Typography>
-                        {user.isAdmin ?
-                            <Button variant="contained" color="primary" onClick={() => {
-                                navigate('/admin')
-                            }}>
-                                Admin
-                            </Button> : <Button variant="contained" color="primary" onClick={() => {
-                                navigate('/admin')
-                            }}>Profile</Button>}
-                        <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                    </>
-                ) : (
-                    <>
-                        <Button color="inherit" component={Link} to="/login">Login</Button>
-                        <Button color="inherit" component={Link} to="/register">Register</Button>
-                    </>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                    <IconButton color="inherit" component={Link} to="/cart">
+                        <Badge badgeContent={cartItemCount} color="secondary">
+                            <ShoppingCartIcon />
+                        </Badge>
+                    </IconButton>
+                    {user ? (
+                        <>
+                            <Button variant="contained" color="primary" onClick={() => navigate(user.isAdmin ? '/admin' : '/profile')}>
+                                {user.isAdmin ? 'Admin' : 'Profile'}
+                            </Button>
+                            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button color="inherit" component={Link} to="/login">Login</Button>
+                            <Button color="inherit" component={Link} to="/register">Register</Button>
+                        </>
+                    )}
+                </div>
             </Toolbar>
         </AppBar>
     );

@@ -67,7 +67,7 @@ const HomePage = () => {
                             </Paper>
                         ))}
                     </Carousel>
-                    <Typography variant="h6" align="center" style={{marginTop: '10px'}}>
+                    <Typography variant="h6" align="center">
                         {homePageInfo.welcomeText}
                     </Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
@@ -78,8 +78,7 @@ const HomePage = () => {
                         </Button>
                     </div>
 
-
-                    <h2>New Arrival</h2>
+                    <Typography variant="h1">New Arrival</Typography>
                     {loading ? (
                         <p>Loading...</p>
                     ) : error ? (

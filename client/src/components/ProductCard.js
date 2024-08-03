@@ -22,7 +22,6 @@ const ProductCard = ({product, onView, onAddToCart}) => {
                 </Typography>
                 <Typography
                     variant="body2"
-                    color="text.secondary"
                     style={{
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
@@ -34,22 +33,22 @@ const ProductCard = ({product, onView, onAddToCart}) => {
                 >
                     {product.description}
                 </Typography>
-                <Button size="small" color="primary" onClick={toggleDescription}>
+                <Button size="small" onClick={toggleDescription}>
                     {showFullDescription ? 'Show Less' : 'Read More'}
                 </Button>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                     Engine Count: {product.engineCount}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                     Engine Type: {product.engineType}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2">
                     Purpose: {product.purpose}
                 </Typography>
-                <Typography variant="h6" color="text.primary">
+                <Typography variant="h6">
                     ${product.price}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" >
                     {product.orderCount} sold
                 </Typography>
             </CardContent>

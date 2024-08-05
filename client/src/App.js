@@ -17,7 +17,6 @@ import {ProductProvider} from './contexts/ProductContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
-// import './index.css'
 import './App.css'
 
 const App = () => {
@@ -26,6 +25,7 @@ const App = () => {
             <UserProvider>
                 <ProductProvider>
                     <CartProvider>
+                        <CssBaseline/>
                         <Header/>
                         <Routes>
                             <Route path="/" element={<HomePage/>}/>

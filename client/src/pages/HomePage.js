@@ -71,7 +71,7 @@ const HomePage = () => {
                         {homePageInfo.welcomeText}
                     </Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                        <Button variant="contained" color="primary" onClick={() => {
+                        <Button variant="contained" onClick={() => {
                             navigate('/products')
                         }}>
                             Browse Products

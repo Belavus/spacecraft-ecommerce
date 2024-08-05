@@ -1,46 +1,110 @@
 // theme.js
 import { createTheme } from '@mui/material/styles';
 
-const baseTheme = createTheme({
+const primaryColor = '#001f3f'; // Основной цвет (темно-синий)
+const secondaryColor = '#0074D9'; // Вторичный цвет (синий)
+const backgroundColor = '#111111'; // Цвет фона (темный)
+const textColor = '#FFFFFF'; // Цвет текста (белый)
+const lightColor = '#B0E0E6'; // Светлый цвет (пастельный)
+const warningColor = '#FF851B'; // Цвет предупреждения (оранжевый)
+
+const theme = createTheme({
     palette: {
+        primary: {
+            main: primaryColor,
+        },
         secondary: {
-            main: '#116466',
+            main: secondaryColor,
         },
         background: {
-            main: '#2C3531',
+            default: backgroundColor,
+            paper: '#222222', // Цвет для карточек и других элементов
         },
         text: {
-            main: '#FFCB9A',
+            primary: textColor,
+            secondary: lightColor,
         },
-        primary: {
-            main: '#2C3531',
-        },
-        light: {
-            main: '#D9B08C',
-        },
-        accent: {
-            main: '#D1E8E2',
+        warning: {
+            main: warningColor,
         },
     },
     typography: {
         fontFamily: 'Roboto, Arial, sans-serif',
         h1: {
-            fontSize: '2rem',
+            fontSize: '2.5rem',
+            fontWeight: 700,
+            color: textColor,
         },
-        // другие настройки типографики
+        h2: {
+            fontSize: '2rem',
+            fontWeight: 600,
+            color: textColor,
+        },
+        h3: {
+            fontSize: '1.75rem',
+            fontWeight: 500,
+            color: textColor,
+        },
+        body1: {
+            fontSize: '1rem',
+            color: textColor,
+        },
+        body2: {
+            fontSize: '0.875rem',
+            color: lightColor,
+        },
     },
-});
-
-const theme = createTheme({
-    ...baseTheme,
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#C5C6C7',
-                    color: '#fff',
+                    borderRadius: '8px',
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    padding: '10px 20px',
+                },
+                containedPrimary: {
+                    backgroundColor: primaryColor,
+                    color: textColor,
                     '&:hover': {
-                        backgroundColor: '#66FCF1',
+                        backgroundColor: '#001a35',
+                    },
+                },
+                containedSecondary: {
+                    backgroundColor: secondaryColor,
+                    color: textColor,
+                    '&:hover': {
+                        backgroundColor: '#005bb5',
+                    },
+                },
+                outlinedPrimary: {
+                    borderColor: primaryColor,
+                    color: primaryColor,
+                    '&:hover': {
+                        backgroundColor: '#001a35',
+                        color: textColor,
+                    },
+                },
+                outlinedSecondary: {
+                    borderColor: secondaryColor,
+                    color: secondaryColor,
+                    '&:hover': {
+                        backgroundColor: '#005bb5',
+                        color: textColor,
+                    },
+                },
+                textPrimary: {
+                    color: textColor,//color for Button's text in Card
+                    '&:hover': {
+                        backgroundColor: '#001a35',
+                        color: textColor,
+                    },
+                },
+                textSecondary: {
+                    color: secondaryColor,
+                    '&:hover': {
+                        backgroundColor: '#005bb5',
+                        color: textColor,
                     },
                 },
             },
@@ -48,14 +112,18 @@ const theme = createTheme({
         MuiCard: {
             styleOverrides: {
                 root: {
-                    backgroundColor: baseTheme.palette.secondary.main, // цвет фона для Card компонента
+                    backgroundColor: '#222222',
+                    color: textColor,
+                    padding: '20px',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 },
             },
         },
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    color: baseTheme.palette.text.main,
+                    color: textColor,
                 },
             },
         },
@@ -63,41 +131,52 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiInputBase-root': {
-                        color: '#ffffff', // цвет текста
+                        color: textColor,
                     },
                     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#1976d2', // цвет границы
+                        borderColor: secondaryColor,
                     },
                     '&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#1565c0', // цвет границы при наведении
+                        borderColor: lightColor,
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: lightColor,
                     },
                 },
             },
         },
-        MuiTab: {
+        MuiAppBar: {
             styleOverrides: {
                 root: {
-                    color: baseTheme.palette.text.main, // цвет текста табов
-                    '&.Mui-selected': {
-                        color: baseTheme.palette.accent.main, // цвет текста выбранного таба
-                    },
+                    backgroundColor: primaryColor,
                 },
-                textColorInherit: {
-                    opacity: 1,
-                },
-                wrapper: {
-                    textTransform: 'none',
+            },
+        },
+        MuiDrawer: {
+            styleOverrides: {
+                paper: {
+                    backgroundColor: '#222222',
+                    color: textColor,
                 },
             },
         },
         MuiTabs: {
             styleOverrides: {
                 indicator: {
-                    backgroundColor: baseTheme.palette.text.main, // цвет индикатора табов
+                    backgroundColor: secondaryColor,
                 },
             },
         },
-        // добавьте другие компоненты по мере необходимости
+        MuiTab: {
+            styleOverrides: {
+                root: {
+                    color: textColor,
+                    '&.Mui-selected': {
+                        color: secondaryColor,
+                    },
+                },
+            },
+        },
     },
 });
 

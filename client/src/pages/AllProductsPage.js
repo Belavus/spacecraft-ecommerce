@@ -166,11 +166,11 @@ const AllProductsPage = () => {
                         <MenuItem value="desc">Price: High to Low</MenuItem>
                     </Select>
                 </FormControl>
-                <Button variant="contained" color="primary" onClick={applyFilters}
+                <Button variant="contained" onClick={applyFilters}
                         style={{marginBottom: '16px', width: '100%'}}>
                     Apply Filters
                 </Button>
-                <Button variant="contained" color="secondary" onClick={resetFilters}
+                <Button variant="contained" onClick={resetFilters}
                         style={{marginBottom: '16px', width: '100%'}}>
                     Reset Filters
                 </Button>

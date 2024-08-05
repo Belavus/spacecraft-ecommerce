@@ -54,12 +54,12 @@ const ProductCard = ({product, onView, onAddToCart}) => {
             </CardContent>
             <CardActions>
                 {onView && (
-                    <Button sx={{boxShadow: 2}} size="small" color="primary" onClick={() => onView(product._id)}>
+                    <Button sx={{boxShadow: 2}} size="small"  onClick={() => onView(product._id)}>
                         View
                     </Button>
                 )}
                 {onAddToCart && (
-                    <Button sx={{boxShadow: 1}} size="small" color="secondary" onClick={() => onAddToCart(product._id)}>
+                    <Button sx={{boxShadow: 2}} size="small" onClick={() => onAddToCart(product._id)}>
                         Add to Cart
                     </Button>
                 )}

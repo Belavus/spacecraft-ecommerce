@@ -2,18 +2,11 @@
 import { createTheme } from '@mui/material/styles';
 
 const primaryColor = '#2C3531'; // Основной цвет (темно-синий)
-const secondaryColor = '#D9B08C'; // Вторичный цвет (синий) 116466
-const backgroundColor = '#116466'; // Цвет фона (темный) D9B08C
+const secondaryColor = '#D9B08C'; // Вторичный цвет (бежевый)
+const backgroundColor = '#116466'; // Цвет фона (темный)
 const textColor = '#FFCB9A'; // Цвет текста (белый)
 const lightColor = '#D1E8E2'; // Светлый цвет (пастельный)
 const warningColor = '#FF851B'; // Цвет предупреждения (оранжевый)
-
-// const primaryColor = '#001f3f'; // Основной цвет (темно-синий)
-// const secondaryColor = '#0074D9'; // Вторичный цвет (синий)
-// const backgroundColor = '#111111'; // Цвет фона (темный)
-// const textColor = '#FFFFFF'; // Цвет текста (белый)
-// const lightColor = '#B0E0E6'; // Светлый цвет (пастельный)
-// const warningColor = '#FF851B'; // Цвет предупреждения (оранжевый)
 
 const theme = createTheme({
     palette: {
@@ -101,7 +94,7 @@ const theme = createTheme({
                     },
                 },
                 textPrimary: {
-                    color: textColor,//color for Button's text in Card
+                    color: textColor, // цвет текста для кнопок
                     '&:hover': {
                         backgroundColor: '#001a35',
                         color: textColor,
@@ -121,7 +114,7 @@ const theme = createTheme({
                 root: {
                     backgroundColor: '#222222',
                     color: textColor,
-                    padding: '0px',
+                    padding: '20px',
                     borderRadius: '10px',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 },
@@ -139,6 +132,7 @@ const theme = createTheme({
                 root: {
                     '& .MuiInputBase-root': {
                         color: textColor,
+                        backgroundColor: backgroundColor, // Set your desired background color here
                     },
                     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
                         borderColor: secondaryColor,
@@ -148,6 +142,36 @@ const theme = createTheme({
                     },
                     '& .MuiInputLabel-root': {
                         color: lightColor,
+                    },
+                    '& .MuiInputBase-input': {
+                        color: textColor,
+                    },
+                    '& .MuiOutlinedInput-input': {
+                        color: textColor,
+                    },
+                },
+            },
+        },
+        MuiAutocomplete: {
+            styleOverrides: {
+                root: {
+                    '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]': {
+                        backgroundColor: backgroundColor, // Set your desired background color here
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: secondaryColor,
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: lightColor,
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: lightColor,
+                        },
+                        '& .MuiInputBase-input': {
+                            color: textColor,
+                        },
+                        '& .MuiOutlinedInput-input': {
+                            color: textColor,
+                        },
                     },
                 },
             },

@@ -19,7 +19,7 @@ const LoginPage = () => {
 
         try {
             const { data } = await api.post('auth/login', { email, password });
-            login(data.token, rememberMe); // Передаем rememberMe
+            login(data.token, rememberMe);
             navigate('/');
         } catch (err) {
             setError('Invalid email or password');

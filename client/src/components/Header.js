@@ -37,10 +37,10 @@ const Header = () => {
                     </IconButton>
                     {user ? (
                         <>
-                            <Button variant="contained" color="primary" onClick={() => navigate(user.isAdmin ? '/admin' : '/profile')}>
+                            <Button variant="contained" onClick={() => navigate(user.isAdmin ? '/admin' : '/profile')}>
                                 {user.isAdmin ? 'Admin' : 'Profile'}
                             </Button>
-                            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                            <Button variant="contained" onClick={handleLogout}>Logout</Button>
                         </>
                     ) : (
                         <>

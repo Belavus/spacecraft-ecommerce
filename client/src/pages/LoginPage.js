@@ -1,18 +1,15 @@
-import React, {useState, useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {UserContext} from '../contexts/UserContext';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 import api from '../services/api';
-import {Box, Checkbox, Container, FormControlLabel, TextField, Typography} from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Box, Checkbox, Container, FormControlLabel, TextField, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 
 const LoginPage = () => {
-    // const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const {login} = useContext(UserContext);
+    const [rememberMe, setRememberMe] = useState(false);
+    const { login } = useContext(UserContext);
     const navigate = useNavigate();
-
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -21,28 +18,13 @@ const LoginPage = () => {
         const password = loginPageInfo.get('password');
 
         try {
-            console.log( email)
-            console.log(password)
-            const {data} = await api.post('auth/login', {email, password});
-            login(data.token);
-            console.log(data)
+            const { data } = await api.post('auth/login', { email, password });
+            login(data.token, rememberMe); // Передаем rememberMe
             navigate('/');
         } catch (err) {
             setError('Invalid email or password');
         }
-    }
-
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const { data } = await api.post('/auth/login', { email, password });
-//             login(data.token);
-//             console.log(data)
-//             navigate('/');
-//         } catch (err) {
-//             setError('Invalid email or password');
-//         }
-//     };
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -58,7 +40,7 @@ const LoginPage = () => {
                     Sign in
                 </Typography>
                 {error && <p>{error}</p>}
-                <Box component="form" onSubmit={handleLogin} noValidate sx={{mt: 1}}>
+                <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
                         required
@@ -80,7 +62,7 @@ const LoginPage = () => {
                         autoComplete="current-password"
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} color="primary" />}
                         label="Remember me"
                     />
                     <Button
@@ -91,6 +73,9 @@ const LoginPage = () => {
                     >
                         Sign In
                     </Button>
+                    <Link to="/register" style={{ textDecoration: 'none' }}>
+                        <Typography>Don't have an account? Sign Up</Typography>
+                    </Link>
                 </Box>
             </Box>
         </Container>
@@ -98,49 +83,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-// import React, { useState, useContext } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { UserContext } from '../contexts/UserContext';
-// import api from '../services/api';
-//
-// const LoginPage = () => {
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [error, setError] = useState('');
-//     const { login } = useContext(UserContext);
-//     const navigate = useNavigate();
-//
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const { data } = await api.post('/auth/login', { email, password });
-//             login(data.token);
-//             console.log(data)
-//             navigate('/');
-//         } catch (err) {
-//             setError('Invalid email or password');
-//         }
-//     };
-//
-//     return (
-//         <div>
-//             <h1>Login</h1>
-//             {error && <p>{error}</p>}
-//             <form onSubmit={handleLogin}>
-//                 <div>
-//                     <label>Email</label>
-//                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-//                 </div>
-//                 <div>
-//                     <label>Password</label>
-//                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-//                 </div>
-//                 <button type="submit">Login</button>
-//             </form>
-//         </div>
-//     );
-// };
-//
-// export default LoginPage;

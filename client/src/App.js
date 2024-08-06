@@ -17,15 +17,15 @@ import {ProductProvider} from './contexts/ProductContext';
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
-import './App.css'
+// import './App.css'
 
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <UserProvider>
                 <ProductProvider>
                     <CartProvider>
-                        <CssBaseline/>
                         <Header/>
                         <Routes>
                             <Route path="/" element={<HomePage/>}/>

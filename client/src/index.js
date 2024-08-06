@@ -5,7 +5,7 @@ import { UserProvider } from './contexts/UserContext';
 import { ProductProvider } from './contexts/ProductContext';
 import { CartProvider } from './contexts/CartContext';
 import App from './App';
-import './App.css';
+// import './App.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

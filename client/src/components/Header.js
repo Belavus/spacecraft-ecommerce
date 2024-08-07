@@ -24,7 +24,7 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static" style={{ backgroundColor: theme.palette.background.main, marginBottom: 0, width: '100%' }}>
+        <AppBar position="static" style={{backgroundColor:theme.palette.background.default, marginBottom: 0, width: '100%' }}>
             <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
                 <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/" style={{ padding: 0 }}>
                     <img src={logo} alt="Logo" style={{ height: '100%', maxHeight: '64px' }} /> {/* Изображение логотипа */}

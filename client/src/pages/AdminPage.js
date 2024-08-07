@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../contexts/UserContext';
 import { Tabs, Tab, Box, Typography, CircularProgress } from '@mui/material';
 import UserManage from '../components/UserManage';
 import ProductManage from '../components/ProductManage';
 import HomePageManage from '../components/HomePageManage';
-import { useNavigate } from 'react-router-dom';
-import apiService from "../services/ApiService";
 
 const AdminPage = () => {
-    const { user } = useContext(UserContext);
     const [selectedTab, setSelectedTab] = useState(0);
-    const [users, setUsers] = useState([]);
-    const [products, setProducts] = useState([]);
-
 
     const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);

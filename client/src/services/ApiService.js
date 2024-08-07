@@ -8,7 +8,8 @@ class ApiService {
 
         // Adding an interceptor to include token in headers
         this.api.interceptors.request.use((config) => {
-            const token = localStorage.getItem('token');
+            let token = localStorage.getItem('token');
+            if (!token) { token = sessionStorage.getItem('token')};
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
             }

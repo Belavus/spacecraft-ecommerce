@@ -12,21 +12,19 @@ import {
     Typography, CircularProgress
 } from '@mui/material';
 import apiService from "../services/ApiService";
+import {UserContext} from "../contexts/UserContext";
 
 const UserManage = () => {
     const [newUser, setNewUser] = useState({name: '', email: '', password: '', isAdmin: false});
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
-    const [products, setProducts] = useState([]);
 
     const fetchData = async () => {
         try {
             console.log("started fetching data")
             const userRes = await apiService.getUsers();
+            console.log(userRes.data);
             setUsers(userRes.data);
-
-            const productRes = await apiService.getProducts();
-            setProducts(productRes.data);
         } catch (error) {
             console.error('Failed to fetch data', error);
         } finally {

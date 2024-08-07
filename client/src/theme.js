@@ -1,10 +1,21 @@
 // theme.js
 import { createTheme } from '@mui/material/styles';
 
-const primaryColor = '#2C3531'; // Основной цвет (темно-синий)
-const secondaryColor = '#D9B08C'; // Вторичный цвет (бежевый)
-const backgroundColor = '#116466'; // Цвет фона (темный)
-const textColor = '#FFCB9A'; // Цвет текста (белый)
+//colors variant 1:
+// const primaryColor = '#2C3531'; // Основной цвет (темно-синий)
+// const secondaryColor = '#D9B08C'; // Вторичный цвет (бежевый)
+// const backgroundColor = '#116466'; // Цвет фона (темный)
+// const textColor = '#FFCB9A'; // Цвет текста (белый)
+// const lightColor = '#D1E8E2'; // Светлый цвет (пастельный)
+// const warningColor = '#FF851B'; // Цвет предупреждения (оранжевый)
+
+//colors variant 2 - Великолепный контраст 27:
+const primaryColor = '#61892F'; // Основной цвет (темно-синий)
+const secondaryColor = '#86C232'; // Вторичный цвет (бежевый)
+const backgroundColor = '#222629'; // Цвет фона (темный)
+const backgroundColor2 = '#474B4F'; // Цвет фона (темный)
+const backgroundColor3 = '#6B6E70'; // Цвет фона (темный)
+const textColor = '#ffffff'; // Цвет текста (белый)
 const lightColor = '#D1E8E2'; // Светлый цвет (пастельный)
 const warningColor = '#FF851B'; // Цвет предупреждения (оранжевый)
 
@@ -18,7 +29,7 @@ const theme = createTheme({
         },
         background: {
             default: backgroundColor,
-            paper: '#222222', // Цвет для карточек и других элементов
+            paper: backgroundColor2, // Цвет для карточек и других элементов
         },
         text: {
             primary: textColor,
@@ -58,30 +69,31 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
+                    margin:'2px',
                     borderRadius: '8px',
                     textTransform: 'none',
                     fontSize: '1rem',
-                    padding: '10px 20px',
+                    padding: '5px 10px',
                 },
                 containedPrimary: {
                     backgroundColor: primaryColor,
                     color: textColor,
                     '&:hover': {
-                        backgroundColor: '#001a35',
+                        backgroundColor: secondaryColor,
                     },
                 },
                 containedSecondary: {
-                    backgroundColor: secondaryColor,
+                    backgroundColor: primaryColor,
                     color: textColor,
                     '&:hover': {
-                        backgroundColor: '#005bb5',
+                        backgroundColor: secondaryColor,
                     },
                 },
                 outlinedPrimary: {
                     borderColor: primaryColor,
                     color: primaryColor,
                     '&:hover': {
-                        backgroundColor: '#001a35',
+                        backgroundColor: secondaryColor,
                         color: textColor,
                     },
                 },
@@ -89,14 +101,15 @@ const theme = createTheme({
                     borderColor: secondaryColor,
                     color: secondaryColor,
                     '&:hover': {
-                        backgroundColor: '#005bb5',
+                        backgroundColor: secondaryColor,
                         color: textColor,
                     },
                 },
                 textPrimary: {
+                    backgroundColor:primaryColor,
                     color: textColor, // цвет текста для кнопок
                     '&:hover': {
-                        backgroundColor: '#001a35',
+                        backgroundColor: secondaryColor,
                         color: textColor,
                     },
                 },
@@ -112,10 +125,10 @@ const theme = createTheme({
         MuiCard: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#222222',
+                    backgroundColor: backgroundColor2,
                     color: textColor,
-                    padding: '20px',
-                    borderRadius: '10px',
+                    padding: '0px',
+                    borderRadius: '15px',
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 },
             },
@@ -155,8 +168,8 @@ const theme = createTheme({
         MuiAutocomplete: {
             styleOverrides: {
                 root: {
-                    '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]': {
-                        backgroundColor: backgroundColor, // Set your desired background color here
+                    '& > .MuiInputBase-root': { // Target child with class MuiInputBase-root
+                        backgroundColor: backgroundColor, // Set your desired background color
                         '& .MuiOutlinedInput-notchedOutline': {
                             borderColor: secondaryColor,
                         },
@@ -172,6 +185,12 @@ const theme = createTheme({
                         '& .MuiOutlinedInput-input': {
                             color: textColor,
                         },
+                    },
+                },
+                option: {
+                    backgroundColor: backgroundColor, // Используйте ваш цвет фона
+                    '&:hover': {
+                        backgroundColor: backgroundColor, // Используйте ваш светлый цвет для hover
                     },
                 },
             },

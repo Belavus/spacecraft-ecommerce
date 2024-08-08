@@ -69,7 +69,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 const registerAdmin = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, isAdmin } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -82,7 +82,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
         name,
         email,
         password,
-        isAdmin: true,
+        isAdmin,
     });
 
     if (user) {

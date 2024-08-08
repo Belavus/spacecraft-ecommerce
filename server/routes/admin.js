@@ -4,7 +4,8 @@ const { getUsers, deleteUser, addProduct, deleteProduct, updateProduct } = requi
 const { protect, admin } = require('../middlewares/authMiddleware');
 
 router.route('/users')
-    .get(protect, admin, getUsers)
+    .get(protect, admin, getUsers);
+router.route('/users/:id')
     .delete(protect, admin, deleteUser);
 
 router.route('/products')

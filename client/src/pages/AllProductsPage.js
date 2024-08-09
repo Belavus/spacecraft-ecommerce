@@ -11,7 +11,7 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel, Box
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
@@ -99,15 +99,14 @@ const AllProductsPage = () => {
     };
 
     return (
-        <Container style={{display: 'flex', flexDirection: 'row', flexGrow: 1}}>
-            <div style={{
-                width: '300px',
-                marginRight: '16px',
-                marginTop: '20px',
-                position: 'fixed',
-                top: '80px',
-                left: '16px'
+        <Grid style={{display: 'flex', flexDirection: 'row', width: '100%', padding: '15px'}}>
+            {/* Блок с фильтрами */}
+            <Box style={{
+                minWidth: '350px',
+                flexDirection: 'row',
+                paddingRight: '20px',
             }}>
+                {/* Элементы фильтрации */}
                 <TextField
                     label="Search"
                     variant="outlined"
@@ -174,11 +173,14 @@ const AllProductsPage = () => {
                         style={{marginBottom: '16px', width: '100%'}}>
                     Reset Filters
                 </Button>
-            </div>
-            <div style={{flexGrow: 1, marginLeft: '100px', marginRight: '20px', marginTop: '20px'}}>
-                <Grid container spacing={5}>
+            </Box>
+
+            <Box style={{
+                flexGrow: 1,
+            }}>
+                <Grid container spacing={4}>
                     {filteredProducts.map((product) => (
-                        <Grid item key={product._id} xs={12} sm={6} md={4}>
+                        <Grid item key={product._id} xs={12} sm={6} md={3}>
                             <ProductCard
                                 product={product}
                                 onView={handleViewProduct}
@@ -187,8 +189,8 @@ const AllProductsPage = () => {
                         </Grid>
                     ))}
                 </Grid>
-            </div>
-        </Container>
+            </Box>
+        </Grid>
     );
 };
 

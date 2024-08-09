@@ -100,13 +100,11 @@ const AllProductsPage = () => {
 
     return (
         <Grid style={{display: 'flex', flexDirection: 'row', width: '100%', padding: '15px'}}>
-            {/* Блок с фильтрами */}
             <Box style={{
                 minWidth: '350px',
                 flexDirection: 'row',
                 paddingRight: '20px',
             }}>
-                {/* Элементы фильтрации */}
                 <TextField
                     label="Search"
                     variant="outlined"

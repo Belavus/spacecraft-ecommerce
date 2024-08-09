@@ -92,7 +92,7 @@ const AllProductsPage = () => {
             engineType: null,
             purpose: null,
             searchQuery: '',
-            priceRange: [0, 1000],
+            priceRange: [0, 10000],
             sortOrder: 'asc'
         });
         setFilteredProducts(products);

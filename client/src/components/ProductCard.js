@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Card, CardContent, CardMedia, Typography, CardActions, Button, Box} from '@mui/material';
+import {Card, CardContent, CardMedia, Typography, CardActions, Button, Box, Chip, Grid, Stack} from '@mui/material';
 
 const ProductCard = ({product, onView, onAddToCart}) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
@@ -36,25 +36,21 @@ const ProductCard = ({product, onView, onAddToCart}) => {
                 <Button size="small" onClick={toggleDescription}>
                     {showFullDescription ? 'Show Less' : 'Read More'}
                 </Button>
-                <Typography variant="body2">
-                    Engine Count: {product.engineCount}
-                </Typography>
-                <Typography variant="body2">
-                    Engine Type: {product.engineType}
-                </Typography>
-                <Typography variant="body2">
-                    Purpose: {product.purpose}
-                </Typography>
+                <Grid style={{margin: '5px'}}>
+                        <Chip margin={'2px'} label={'Engine Count: ' + product.engineCount} variant="outlined"/>
+                        <Chip label={'Engine Type: ' + product.engineType} variant="outlined"/>
+                        <Chip label={'Purpose: ' + product.purpose} variant="outlined"/>
+                </Grid>
                 <Typography variant="h6">
                     ${product.price}
                 </Typography>
-                <Typography variant="body2" >
+                <Typography variant="body2">
                     {product.orderCount} sold
                 </Typography>
             </CardContent>
             <CardActions>
                 {onView && (
-                    <Button sx={{boxShadow: 2}} size="small"  onClick={() => onView(product._id)}>
+                    <Button sx={{boxShadow: 2}} size="small" onClick={() => onView(product._id)}>
                         View
                     </Button>
                 )}

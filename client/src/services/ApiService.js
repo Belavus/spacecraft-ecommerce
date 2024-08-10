@@ -104,6 +104,7 @@ class ApiService {
     updateHomePageInfo(data) {
         return this.api.put('/homepage', data);
     }
+
 }
 
 const apiService = new ApiService(process.env.REACT_APP_API_URL || 'http://localhost:5000/api');

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Container, Grid, Typography, CircularProgress, Button, Card, CardContent } from '@mui/material';
+import React, {useEffect, useState, useContext} from 'react';
+import {Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField} from '@mui/material';
 import apiService from '../services/ApiService';
-import { UserContext } from '../contexts/UserContext';
-import { CartContext } from '../contexts/CartContext';
+import {UserContext} from '../contexts/UserContext';
+import {CartContext} from '../contexts/CartContext';
 import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
 
 const CartPage = () => {
-    const { user } = useContext(UserContext);
-    const { cart, updateCart, removeFromCart } = useContext(CartContext);
+    const {user} = useContext(UserContext);
+    const {cart, updateCart, removeFromCart, updateCartQuantity} = useContext(CartContext);
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
 
@@ -24,7 +24,7 @@ const CartPage = () => {
             }
         };
         fetchOrders();
-        updateCart();  // обновить состояние корзины при загрузке страницы
+        updateCart();
     }, [user, updateCart]);
 
     const handleRemoveItem = async (productId) => {
@@ -33,6 +33,10 @@ const CartPage = () => {
         } catch (error) {
             console.error('Failed to remove item from cart', error);
         }
+    };
+
+    const handleQuantityChange = (productId, newQuantity) => {
+        updateCartQuantity(productId, newQuantity);
     };
 
     const handlePlaceOrder = async () => {
@@ -64,7 +68,7 @@ const CartPage = () => {
     };
 
     if (!cart || loadingOrders) {
-        return <CircularProgress />;
+        return <CircularProgress/>;
     }
 
     return (
@@ -82,16 +86,27 @@ const CartPage = () => {
                                     onView={null}
                                     onAddToCart={null}
                                 />
-                                <Button variant="contained" color="secondary" onClick={() => handleRemoveItem(item.product._id)}>
+                                <TextField
+                                    type="number"
+                                    label="Quantity"
+                                    variant="outlined"
+                                    value={item.quantity}
+                                    onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
+                                    inputProps={{min: 1}}
+                                    fullWidth
+                                    style={{marginTop: '10px'}}
+                                />
+                                <Button variant="contained" color="secondary"
+                                        onClick={() => handleRemoveItem(item.product._id)}>
                                     Remove
                                 </Button>
                             </Grid>
                         ))}
                     </Grid>
-                    <Typography variant="h6" style={{ marginTop: '16px' }}>
+                    <Typography variant="h6" style={{marginTop: '16px'}}>
                         Total: ${calculateCartTotal()}
                     </Typography>
-                    <Button variant="contained" color="primary" onClick={handlePlaceOrder} style={{ marginTop: '16px' }}>
+                    <Button variant="contained" color="primary" onClick={handlePlaceOrder} style={{marginTop: '16px'}}>
                         Place Order
                     </Button>
                 </div>
@@ -99,7 +114,7 @@ const CartPage = () => {
                 <Typography variant="h6">Your cart is empty</Typography>
             )}
 
-            <Typography variant="h4" gutterBottom style={{ marginTop: '32px' }}>
+            <Typography variant="h4" gutterBottom style={{marginTop: '32px'}}>
                 Your Orders
             </Typography>
             {orders.length > 0 ? (
@@ -126,7 +141,7 @@ const CartPage = () => {
                                     <Typography variant="body2" color="textSecondary">
                                         Order Date: {new Date(order.createdAt).toLocaleDateString()}
                                     </Typography>
-                                    <Typography variant="h6" style={{ marginTop: '16px' }}>
+                                    <Typography variant="h6" style={{marginTop: '16px'}}>
                                         Total: ${calculateOrderTotal(order)}
                                     </Typography>
                                 </CardContent>

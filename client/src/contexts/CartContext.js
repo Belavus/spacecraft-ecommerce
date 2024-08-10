@@ -19,10 +19,23 @@ const CartProvider = ({ children }) => {
         fetchCart();
     }, []);
 
-    const addToCart = async (productId) => {
+    const updateCartQuantity = async (productId, quantity) => {
         try {
-            await apiService.addToCart({ productId, quantity: 1 });
-            await fetchCart();  // обновить состояние корзины после добавления товара
+            const updatedItems = cart.items.map(item =>
+                item.product._id === productId ? { ...item, quantity } : item
+            );
+
+            await apiService.updateCart({ items: updatedItems });
+            await fetchCart();
+        } catch (error) {
+            console.error('Failed to update cart quantity', error);
+        }
+    };
+
+    const addToCart = async (productId, quantity = 1) => {
+        try {
+            await apiService.addToCart({ productId, quantity });
+            await fetchCart();
         } catch (error) {
             console.error('Failed to add to cart', error);
         }
@@ -31,7 +44,7 @@ const CartProvider = ({ children }) => {
     const removeFromCart = async (productId) => {
         try {
             await apiService.deleteCartItem(productId);
-            await fetchCart();  // refresh cart
+            await fetchCart();
         } catch (error) {
             console.error('Failed to remove from cart', error);
         }
@@ -44,7 +57,7 @@ const CartProvider = ({ children }) => {
     const cartItemCount = cart ? cart.items.reduce((total, item) => total + item.quantity, 0) : 0;
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateCart, cartItemCount }}>
+        <CartContext.Provider value={{ cart, updateCartQuantity, addToCart, removeFromCart, updateCart, cartItemCount }}>
             {children}
         </CartContext.Provider>
     );

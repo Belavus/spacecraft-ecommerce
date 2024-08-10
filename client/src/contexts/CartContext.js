@@ -1,23 +1,30 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import apiService from '../services/ApiService';
+import { UserContext } from '../contexts/UserContext'; // Импорт UserContext
 
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
+    const { user } = useContext(UserContext); // Доступ к текущему пользователю
     const [cart, setCart] = useState(null);
 
     const fetchCart = async () => {
-        try {
-            const res = await apiService.getCart();
-            setCart(res.data);
-        } catch (error) {
-            console.error('Failed to fetch cart', error);
+        if (user) {
+            try {
+                const res = await apiService.getCart();
+                setCart(res.data);
+            } catch (error) {
+                console.error('Failed to fetch cart', error);
+                setCart(null);
+            }
+        } else {
+            setCart(null);
         }
     };
 
     useEffect(() => {
         fetchCart();
-    }, []);
+    }, [user]);
 
     const updateCartQuantity = async (productId, quantity) => {
         try {

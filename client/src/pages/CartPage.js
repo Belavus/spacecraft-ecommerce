@@ -3,12 +3,14 @@ import { Container, Grid, Typography, CircularProgress, Button, Card, CardConten
 import apiService from '../services/ApiService';
 import { UserContext } from '../contexts/UserContext';
 import { CartContext } from '../contexts/CartContext';
+import {ProductContext} from '../contexts/ProductContext'
 import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
 
 const CartPage = () => {
     const { user } = useContext(UserContext);
     const { cart, updateCart, removeFromCart, updateCartQuantity } = useContext(CartContext);
+    const { fetchProducts } = useContext(ProductContext);
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [quantity, setQuantity] = useState({});
@@ -55,6 +57,7 @@ const CartPage = () => {
             await updateCart();
             const ordersRes = await apiService.getOrders();
             setOrders(ordersRes.data);
+            fetchProducts();
             alert('Order placed successfully');
         } catch (error) {
             console.error('Failed to place order', error);

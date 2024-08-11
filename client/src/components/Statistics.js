@@ -14,6 +14,7 @@ const Statistics = () => {
     }));
 
     useEffect(() => {
+
         const svg = d3.select(svgRef.current);
         svg.selectAll('*').remove();
 
@@ -38,7 +39,7 @@ const Statistics = () => {
             .attr('transform', `translate(${margin.left},0)`)
             .call(d3.axisLeft(y));
 
-        // Использование цвета из темы
+        // using color from theme
         const barColor = theme.palette.primary.main;
         const axisColor = theme.palette.text.primary;
 
@@ -50,25 +51,25 @@ const Statistics = () => {
             .attr('y', d => y(d.value))
             .attr('height', d => y(0) - y(d.value))
             .attr('width', x.bandwidth())
-            .attr('fill', barColor); // Установка цвета столбцов
+            .attr('fill', barColor);
 
         svg.append('g')
             .call(xAxis)
             .selectAll('text')
-            .attr('fill', axisColor); // Установка цвета текста оси X
+            .attr('fill', axisColor);
 
         svg.append('g')
             .call(yAxis)
             .selectAll('text')
-            .attr('fill', axisColor); // Установка цвета текста оси Y
+            .attr('fill', axisColor);
 
-        // Добавление подписей осей
+        // texts for axis
         svg.append("text")
             .attr("x", width / 2)
             .attr("y", height - 10)
             .attr("text-anchor", "middle")
             .attr("font-size", "12px")
-            .attr('fill', axisColor) // Цвет подписи
+            .attr('fill', axisColor)
             .text("Product Name");
 
         svg.append("text")
@@ -77,7 +78,7 @@ const Statistics = () => {
             .attr("y", 20)
             .attr("text-anchor", "middle")
             .attr("font-size", "12px")
-            .attr('fill', axisColor) // Цвет подписи
+            .attr('fill', axisColor)
             .text("Order Count");
 
     }, [data, theme, products]);

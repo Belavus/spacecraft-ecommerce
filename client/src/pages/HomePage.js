@@ -3,7 +3,6 @@ import {UserContext} from '../contexts/UserContext';
 import {ProductContext} from '../contexts/ProductContext';
 import CanvasComponent from '../components/CanvasComponent';
 import Chat from '../components/Chat';
-import Statistics from '../components/Statistics';
 import {useNavigate} from 'react-router-dom';
 import Button from "@mui/material/Button";
 import Carousel from 'react-material-ui-carousel';
@@ -47,12 +46,6 @@ const HomePage = () => {
     }, []);
 
     const latestProducts = products.slice(-4);// 4 newest products
-
-    // Пример данных для статистики
-    const statsData = products.map(product => ({
-        name: product.name,
-        value: product.orderCount
-    }));
 
     return (
         <div>
@@ -98,7 +91,6 @@ const HomePage = () => {
                     )}
                     <CanvasComponent/>
                     <Chat/>
-                    <Statistics data={statsData}/>
                 </div>
             ) : (
                 <p>Please log in to see the content.</p>

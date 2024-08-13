@@ -16,25 +16,53 @@ const getProductById = asyncHandler(async (req, res) => {
     }
 });
 
-const createProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
-    const product = new Product({ name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose });
-    const createdProduct = await product.save();
-    res.status(201).json(createdProduct);
-});
+// const createProduct = asyncHandler(async (req, res) => {
+//     const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
+//     const product = new Product({ name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose });
+//     const createdProduct = await product.save();
+//     res.status(201).json(createdProduct);
+// });
 
-const updateProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
+// const updateProduct = asyncHandler(async (req, res) => {
+//     const { name, price, description, imageUrl, videoUrl, engineCount, engineType, purpose } = req.body;
+//     const product = await Product.findById(req.params.id);
+//     if (product) {
+//         product.name = name;
+//         product.price = price;
+//         product.description = description;
+//         product.imageUrl = imageUrl;
+//         product.videoUrl = videoUrl;
+//         product.engineCount = engineCount;
+//         product.engineType = engineType;
+//         product.purpose = purpose;
+//         const updatedProduct = await product.save();
+//         res.json(updatedProduct);
+//     } else {
+//         res.status(404);
+//         throw new Error('Product not found');
+//     }
+// });
+
+const updateProductRating = asyncHandler(async (req, res) => {
+    const { rating } = req.body;
     const product = await Product.findById(req.params.id);
+    const userId = req.user._id;
+
     if (product) {
-        product.name = name;
-        product.price = price;
-        product.description = description;
-        product.imageUrl = imageUrl;
-        product.videoUrl = videoUrl;
-        product.engineCount = engineCount;
-        product.engineType = engineType;
-        product.purpose = purpose;
+        const existingRating = product.ratings.find(r => r.userId.toString() === userId.toString());
+
+        if (existingRating) {
+            // update existing rating
+            existingRating.rating = rating;
+        } else {
+            // add rating if rating not exist
+            product.ratings.push({ userId, rating });
+            product.ratingCount += 1;
+        }
+
+        // counting total rating
+        product.rating = product.ratings.reduce((total, r) => total + r.rating, 0) / product.ratingCount;
+
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } else {
@@ -43,16 +71,16 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 });
 
-const deleteProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    if (product) {
-        await product.remove();
-        res.json({ message: 'Product removed' });
-    } else {
-        res.status(404);
-        throw new Error('Product not found');
-    }
-});
+// const deleteProduct = asyncHandler(async (req, res) => {
+//     const product = await Product.findById(req.params.id);
+//     if (product) {
+//         await product.remove();
+//         res.json({ message: 'Product removed' });
+//     } else {
+//         res.status(404);
+//         throw new Error('Product not found');
+//     }
+// });
 
 // method to get unique values for filters
 const getUniqueProductValues = asyncHandler(async (req, res) => {
@@ -63,4 +91,4 @@ const getUniqueProductValues = asyncHandler(async (req, res) => {
     res.json({ engineCounts, engineTypes, purposes });
 });
 
-module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, getUniqueProductValues };
+module.exports = { getProducts, getProductById, getUniqueProductValues, updateProductRating };

@@ -70,6 +70,10 @@ class ApiService {
         return this.api.get('/products/unique/values');
     }
 
+    updateProductRating(id, rating) {
+        return this.api.put(`/products/${id}/rating`, { rating });
+    }
+
     // Cart endpoints
     addToCart(data) {
         return this.api.post('/cart', data);

@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom';
 import apiService from '../services/ApiService';
 import { Container, Card, CardContent, CardMedia, Typography, CircularProgress, Button } from '@mui/material';
 import { CartContext } from '../contexts/CartContext';
+import Rating from '@mui/material/Rating';
 
 const ProductPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { addToCart } = useContext(CartContext); // Используем CartContext для добавления товаров в корзину
+    const { addToCart } = useContext(CartContext);
+    const [userRating, setUserRating] = useState(0);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -26,11 +28,22 @@ const ProductPage = () => {
 
     const handleAddToCart = async () => {
         try {
-            await addToCart(product._id); // Добавляем товар в корзину через CartContext
+            await addToCart(product._id);
             alert('Product added to cart');
         } catch (error) {
             console.error('Failed to add product to cart', error);
             alert('Failed to add product to cart');
+        }
+    };
+
+    const handleRatingChange = async (newValue) => {
+        setUserRating(newValue);
+        try {
+            await apiService.updateProductRating(id, newValue);
+            const res = await apiService.getProductById(id);
+            setProduct(res.data);
+        } catch (error) {
+            console.error('Failed to update rating', error);
         }
     };
 
@@ -55,6 +68,12 @@ const ProductPage = () => {
                     <Typography gutterBottom variant="h4" component="div">
                         {product.name}
                     </Typography>
+                    <Rating
+                        name="product-rating"
+                        value={product.rating}
+                        onChange={(event, newValue) => handleRatingChange(newValue)}
+                        precision={0.5}
+                    />
                     <Typography variant="body1" color="textSecondary">
                         {product.description}
                     </Typography>

@@ -39,6 +39,27 @@ const productSchema = mongoose.Schema({
         type: String,
         required: false,
     },
+    rating: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
+    ratingCount: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
+    ratings: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
+        rating: {
+            type: Number,
+            required: true,
+        }
+    }]
 }, {
     timestamps: true,
 });

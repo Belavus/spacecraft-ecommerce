@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
-import { CartContext } from '../contexts/CartContext';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
-import logo from '../resources/logo.png';
+import { UserContext } from '../../contexts/UserContext';
+import { CartContext } from '../../contexts/CartContext';
+import logo from '../../resources/logo.png';
 
 const Header = () => {
     const { user, logout } = useContext(UserContext);
@@ -21,9 +21,9 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="fixed" color="primary">
-            <Toolbar style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
-                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/" style={{ padding: 0 }}>
+        <AppBar>
+            <Toolbar>
+                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/">
                     <img src={logo} alt="Logo" style={{ height: '100%', maxHeight: '64px' }} />
                 </IconButton>
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>

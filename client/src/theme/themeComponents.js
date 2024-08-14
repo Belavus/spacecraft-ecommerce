@@ -9,6 +9,7 @@ import {
     lightColor,
     cardBackgroundColor
 } from './colors';
+import { HEADER_HEIGHT } from './sizes';
 
 export const components = {
     MuiCssBaseline: {
@@ -26,8 +27,26 @@ export const components = {
     MuiAppBar: {
         styleOverrides: {
             root: {
+                position: 'fixed',
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 boxShadow: 'none',
+            },
+        },
+    },
+    MuiToolbar: {
+        styleOverrides: {
+            root: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: HEADER_HEIGHT,
+            },
+        },
+    },
+    MuiIconButton: {
+        styleOverrides: {
+            root: {
+                padding: 0,
             },
         },
     },

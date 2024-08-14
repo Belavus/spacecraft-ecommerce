@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Tabs, Tab, Box, Typography, CircularProgress } from '@mui/material';
+import React, { useState } from 'react';
+import { Tabs, Tab, Box, Typography } from '@mui/material';
 import UserManage from '../components/UserManage';
 import ProductManage from '../components/ProductManage';
 import HomePageManage from '../components/HomePageManage';
 import Statistics from '../components/Statistics';
+import PageContainer from "../components/PageContainer/PageContainer";
 
 const AdminPage = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -13,7 +14,7 @@ const AdminPage = () => {
     };
 
     return (
-        <div>
+        <PageContainer withHeaderOffset>
             <Typography variant="h4">Admin Page</Typography>
             <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Admin Tabs">
                 <Tab label="Manage Users" />
@@ -27,7 +28,7 @@ const AdminPage = () => {
                 {selectedTab === 2 && <HomePageManage />}
                 {selectedTab === 3 && <Statistics />}
             </Box>
-        </div>
+        </PageContainer>
     );
 };
 

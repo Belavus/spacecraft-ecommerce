@@ -8,7 +8,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminPage from './pages/AdminPage';
 import AllProductsPage from './pages/AllProductsPage';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
 import {UserProvider} from './contexts/UserContext';
@@ -18,7 +18,6 @@ import {OrderProvider} from "./contexts/OrderContext";
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from "./theme/theme";
-// import './App.css'
 
 const App = () => {
     return (

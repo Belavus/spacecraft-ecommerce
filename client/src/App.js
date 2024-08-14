@@ -17,7 +17,7 @@ import {CartProvider} from './contexts/CartContext';
 import {OrderProvider} from "./contexts/OrderContext";
 import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import theme from './theme';
+import theme from "./theme/theme";
 // import './App.css'
 
 const App = () => {

@@ -14,7 +14,7 @@ import PageContainer from '../components/PageContainer/PageContainer';
 
 const HomePage = () => {
     const { user } = useContext(UserContext);
-    const { products, loading, error } = useContext(ProductContext);
+    const { products, loading, error, fetchProducts } = useContext(ProductContext);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [homePageInfo, setHomePageInfo] = useState({ carouselImages: [], welcomeText: '' });
     const navigate = useNavigate();
@@ -44,6 +44,7 @@ const HomePage = () => {
         };
 
         fetchHomePageInfo();
+        fetchProducts();
     }, []);
 
     const latestProducts = products.slice(-4); // 4 newest products

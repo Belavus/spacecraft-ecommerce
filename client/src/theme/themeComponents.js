@@ -220,4 +220,14 @@ export const components = {
             },
         },
     },
+    MuiRating: {
+        styleOverrides: {
+            root: {
+                color: textColor,
+            },
+            iconEmpty: {
+                color: textColor,
+            },
+        },
+    },
 };

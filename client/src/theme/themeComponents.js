@@ -131,6 +131,10 @@ export const components = {
                     color: textColor,
                     backgroundColor: fallbackColor,
                 },
+                '&.Mui-focused': {
+                    color: lightColor
+                },
+
                 '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
                     borderColor: secondaryColor,
                 },
@@ -180,14 +184,6 @@ export const components = {
                 '&:hover': {
                     backgroundColor: fallbackColor,
                 },
-            },
-        },
-    },
-    MuiDrawer: {
-        styleOverrides: {
-            paper: {
-                backgroundColor: '#222222',
-                color: textColor,
             },
         },
     },

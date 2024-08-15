@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField } from '@mui/material';
+import React, {useEffect, useState, useContext} from 'react';
+import {Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField} from '@mui/material';
 import apiService from '../services/ApiService';
-import { UserContext } from '../contexts/UserContext';
-import { CartContext } from '../contexts/CartContext';
+import {UserContext} from '../contexts/UserContext';
+import {CartContext} from '../contexts/CartContext';
 import {ProductContext} from '../contexts/ProductContext'
 import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
+import PageContainer from "../components/PageContainer/PageContainer";
 
 const CartPage = () => {
-    const { user } = useContext(UserContext);
-    const { cart, updateCart, removeFromCart, updateCartQuantity } = useContext(CartContext);
-    const { fetchProducts } = useContext(ProductContext);
+    const {user} = useContext(UserContext);
+    const {cart, updateCart, removeFromCart, updateCartQuantity} = useContext(CartContext);
+    const {fetchProducts} = useContext(ProductContext);
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [quantity, setQuantity] = useState({});
@@ -81,103 +82,106 @@ const CartPage = () => {
     };
 
     if (!cart || loadingOrders) {
-        return <CircularProgress />;
+        return <CircularProgress/>;
     }
 
     return (
-        <Container>
-            <Typography variant="h4" gutterBottom>
-                Your Cart
-            </Typography>
-            {cart && cart.items.length > 0 ? (
-                <div>
+        <PageContainer>
+            <Container>
+                <Typography variant="h4" gutterBottom>
+                    Your Cart
+                </Typography>
+                {cart && cart.items.length > 0 ? (
+                    <div>
+                        <Grid container spacing={4}>
+                            {cart.items.map((item) => (
+                                <Grid item key={item.product._id} xs={12} sm={6} md={4}>
+                                    <ProductCard
+                                        product={item.product}
+                                        onView={null}
+                                        onAddToCart={null}
+                                    />
+                                    <TextField
+                                        type="number"
+                                        label="Quantity"
+                                        variant="outlined"
+                                        value={quantity[item.product._id] || item.quantity}
+                                        onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
+                                        inputProps={{min: 1}}
+                                        fullWidth
+                                        style={{marginTop: '10px'}}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => handleSetQuantity(item.product._id)}
+                                        style={{marginTop: '10px'}}
+                                    >
+                                        Set
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => handleRemoveItem(item.product._id)}
+                                        style={{marginTop: '10px', marginLeft: '10px'}}
+                                    >
+                                        Remove
+                                    </Button>
+                                </Grid>
+                            ))}
+                        </Grid>
+                        <Typography variant="h6" style={{marginTop: '16px'}}>
+                            Total: ${calculateCartTotal()}
+                        </Typography>
+                        <Button variant="contained" color="primary" onClick={handlePlaceOrder}
+                                style={{marginTop: '16px'}}>
+                            Place Order
+                        </Button>
+                    </div>
+                ) : (
+                    <Typography variant="h6">Your cart is empty</Typography>
+                )}
+
+                <Typography variant="h4" gutterBottom style={{marginTop: '32px'}}>
+                    Your Orders
+                </Typography>
+                {orders.length > 0 ? (
                     <Grid container spacing={4}>
-                        {cart.items.map((item) => (
-                            <Grid item key={item.product._id} xs={12} sm={6} md={4}>
-                                <ProductCard
-                                    product={item.product}
-                                    onView={null}
-                                    onAddToCart={null}
-                                />
-                                <TextField
-                                    type="number"
-                                    label="Quantity"
-                                    variant="outlined"
-                                    value={quantity[item.product._id] || item.quantity}
-                                    onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
-                                    inputProps={{ min: 1 }}
-                                    fullWidth
-                                    style={{ marginTop: '10px' }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => handleSetQuantity(item.product._id)}
-                                    style={{ marginTop: '10px' }}
-                                >
-                                    Set
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => handleRemoveItem(item.product._id)}
-                                    style={{ marginTop: '10px', marginLeft: '10px' }}
-                                >
-                                    Remove
-                                </Button>
+                        {orders.map((order) => (
+                            <Grid item key={order._id} xs={12}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            Order ID: {order._id}
+                                        </Typography>
+                                        <Grid container spacing={2}>
+                                            {order.items.map((item) => (
+                                                <Grid item key={item.product._id} xs={6} sm={4} md={3}>
+                                                    <SmallProductCard
+                                                        product={item.product}
+                                                    />
+                                                    <Typography variant="body1" color="textSecondary">
+                                                        Quantity: {item.quantity}
+                                                    </Typography>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Order Date: {new Date(order.createdAt).toLocaleDateString()}
+                                        </Typography>
+                                        <Typography variant="h6" style={{marginTop: '16px'}}>
+                                            Total: ${calculateOrderTotal(order)}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
                             </Grid>
                         ))}
                     </Grid>
-                    <Typography variant="h6" style={{ marginTop: '16px' }}>
-                        Total: ${calculateCartTotal()}
-                    </Typography>
-                    <Button variant="contained" color="primary" onClick={handlePlaceOrder} style={{ marginTop: '16px' }}>
-                        Place Order
-                    </Button>
-                </div>
-            ) : (
-                <Typography variant="h6">Your cart is empty</Typography>
-            )}
-
-            <Typography variant="h4" gutterBottom style={{ marginTop: '32px' }}>
-                Your Orders
-            </Typography>
-            {orders.length > 0 ? (
-                <Grid container spacing={4}>
-                    {orders.map((order) => (
-                        <Grid item key={order._id} xs={12}>
-                            <Card>
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        Order ID: {order._id}
-                                    </Typography>
-                                    <Grid container spacing={2}>
-                                        {order.items.map((item) => (
-                                            <Grid item key={item.product._id} xs={6} sm={4} md={3}>
-                                                <SmallProductCard
-                                                    product={item.product}
-                                                />
-                                                <Typography variant="body1" color="textSecondary">
-                                                    Quantity: {item.quantity}
-                                                </Typography>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Order Date: {new Date(order.createdAt).toLocaleDateString()}
-                                    </Typography>
-                                    <Typography variant="h6" style={{ marginTop: '16px' }}>
-                                        Total: ${calculateOrderTotal(order)}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-            ) : (
-                <Typography variant="h6">You have no orders</Typography>
-            )}
-        </Container>
+                ) : (
+                    <Typography variant="h6">You have no orders</Typography>
+                )}
+            </Container>
+        </PageContainer>
     );
 };
 

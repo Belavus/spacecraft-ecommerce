@@ -12,6 +12,7 @@ export const warningColor = '#FF204E';
 export const palette = {
     primary: {
         main: primaryColor,
+        contrastText: textColor,
     },
     secondary: {
         main: secondaryColor,

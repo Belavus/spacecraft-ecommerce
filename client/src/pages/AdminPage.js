@@ -14,7 +14,7 @@ const AdminPage = () => {
     };
 
     return (
-        <PageContainer withHeaderOffset>
+        <PageContainer>
             <Typography variant="h4">Admin Page</Typography>
             <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Admin Tabs">
                 <Tab label="Manage Users" />

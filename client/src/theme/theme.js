@@ -9,7 +9,7 @@ const theme = createTheme({
     typography,
     components,
     sizes: {
-        headerHeight: HEADER_HEIGHT,
+        headerHeight: `${HEADER_HEIGHT}px`,
         pagePaddingTop: PAGE_PADDING_TOP,
     },
 });

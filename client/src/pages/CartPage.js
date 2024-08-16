@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField} from '@mui/material';
+import {Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField, Box} from '@mui/material';
 import apiService from '../services/ApiService';
 import {UserContext} from '../contexts/UserContext';
 import {CartContext} from '../contexts/CartContext';
@@ -16,19 +16,21 @@ const CartPage = () => {
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [quantity, setQuantity] = useState({});
 
+    const fetchOrders = async () => {
+        try {
+            const ordersRes = await apiService.getOrders();
+            setOrders(ordersRes.data);
+        } catch (error) {
+            console.error('Failed to fetch orders', error);
+        } finally {
+            setLoadingOrders(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const ordersRes = await apiService.getOrders();
-                setOrders(ordersRes.data);
-            } catch (error) {
-                console.error('Failed to fetch orders', error);
-            } finally {
-                setLoadingOrders(false);
-            }
-        };
         fetchOrders();
         updateCart();
+        setLoadingOrders(false)
     }, [user, updateCart]);
 
     const handleRemoveItem = async (productId) => {
@@ -81,8 +83,8 @@ const CartPage = () => {
         }, 0);
     };
 
-    if (!cart || loadingOrders) {
-        return <CircularProgress/>;
+    if (loadingOrders) {
+        return <PageContainer><CircularProgress/></PageContainer>;
     }
 
     return (
@@ -92,57 +94,65 @@ const CartPage = () => {
                     Your Cart
                 </Typography>
                 {cart && cart.items.length > 0 ? (
-                    <div>
+                    <Box>
                         <Grid container spacing={4}>
                             {cart.items.map((item) => (
-                                <Grid item key={item.product._id} xs={12} sm={6} md={4}>
-                                    <ProductCard
-                                        product={item.product}
-                                        onView={null}
-                                        onAddToCart={null}
-                                    />
-                                    <TextField
-                                        type="number"
-                                        label="Quantity"
-                                        variant="outlined"
-                                        value={quantity[item.product._id] || item.quantity}
-                                        onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
-                                        inputProps={{min: 1}}
-                                        fullWidth
-                                        style={{marginTop: '10px'}}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => handleSetQuantity(item.product._id)}
-                                        style={{marginTop: '10px'}}
-                                    >
-                                        Set
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() => handleRemoveItem(item.product._id)}
-                                        style={{marginTop: '10px', marginLeft: '10px'}}
-                                    >
-                                        Remove
-                                    </Button>
-                                </Grid>
+                                item.product ? (
+                                    <Grid item key={item.product._id} xs={12} sm={6} md={4}>
+                                        <Box sx={{ width: 300}}>
+                                            <ProductCard
+                                                product={item.product}
+                                                onView={null}
+                                                onAddToCart={null}
+                                            />
+                                            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
+                                                <TextField sx={{width:'50%'}}
+                                                    type="number"
+                                                    label="Quantity"
+                                                    variant="outlined"
+                                                    value={quantity[item.product._id] || item.quantity}
+                                                    onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
+                                                    inputProps={{ min: 1 }}
+                                                />
+                                                <Button sx={{ height: '40px'}} onClick={() => handleSetQuantity(item.product._id)}
+                                                >
+                                                    Set
+                                                </Button>
+                                                <Button sx={{ height: '40px' }} onClick={() => handleRemoveItem(item.product._id)}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                ) : (
+                                    <Grid item key={item._id} xs={12} sm={6} md={4}>
+                                        <Typography variant="body2" color="error">
+                                            Product information is not available.
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => handleRemoveItem(item._id)}
+                                        >
+                                            Remove from Cart
+                                        </Button>
+                                    </Grid>
+                                )
                             ))}
                         </Grid>
-                        <Typography variant="h6" style={{marginTop: '16px'}}>
+                        <Typography variant="h6">
                             Total: ${calculateCartTotal()}
                         </Typography>
-                        <Button variant="contained" color="primary" onClick={handlePlaceOrder}
-                                style={{marginTop: '16px'}}>
+                        <Button variant="contained" color="primary" onClick={handlePlaceOrder}>
                             Place Order
                         </Button>
-                    </div>
+                    </Box>
                 ) : (
                     <Typography variant="h6">Your cart is empty</Typography>
                 )}
 
-                <Typography variant="h4" gutterBottom style={{marginTop: '32px'}}>
+                <Typography variant="h4" gutterBottom>
                     Your Orders
                 </Typography>
                 {orders.length > 0 ? (
@@ -169,7 +179,7 @@ const CartPage = () => {
                                         <Typography variant="body2" color="textSecondary">
                                             Order Date: {new Date(order.createdAt).toLocaleDateString()}
                                         </Typography>
-                                        <Typography variant="h6" style={{marginTop: '16px'}}>
+                                        <Typography variant="h6">
                                             Total: ${calculateOrderTotal(order)}
                                         </Typography>
                                     </CardContent>

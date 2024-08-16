@@ -49,7 +49,7 @@ const HomePage = () => {
         <div>
             <CarouselWithOverlay images={homePageInfo.carouselImages} welcomeText={homePageInfo.welcomeText} />
             <PageContainer withHeaderOffset={false}>
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center',marginTop:'20px' , marginBottom: '20px' }}>
                     <Button variant="contained" onClick={() => navigate('/products')}>
                         Browse Products
                     </Button>

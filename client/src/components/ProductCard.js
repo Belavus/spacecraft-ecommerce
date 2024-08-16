@@ -1,60 +1,61 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, CardActions, Button, Grid, Chip } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, CardActions, Button, Tooltip, Stack } from '@mui/material';
 import Rating from '@mui/material/Rating';
 
 const ProductCard = ({ product, onView, onAddToCart }) => {
-    const [showFullDescription, setShowFullDescription] = React.useState(false);
-
-    const toggleDescription = () => {
-        setShowFullDescription(!showFullDescription);
-    };
-
     return (
-        <Card>
+        <Card sx={{ width: 300, boxShadow: 3, borderRadius: 2 }}>
             <CardMedia
                 component="img"
-                height="140"
+                sx={{ height: 180, objectFit: 'cover' }}
                 image={product.imageUrl}
                 alt={product.name}
             />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+            <CardContent sx={{ padding: 2 }}>
+                <Typography gutterBottom variant="h5" component="div" fontWeight="bold">
                     {product.name}
                 </Typography>
                 <Rating name="read-only" value={product.rating} readOnly precision={0.5} />
-                <Typography variant="body2" style={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    WebkitLineClamp: showFullDescription ? 'unset' : 3,
-                    maxHeight: showFullDescription ? 'none' : '4.5em',
-                    transition: 'max-height 0.3s ease'
-                }}>
-                    {product.description}
-                </Typography>
-                <Button size="small" onClick={toggleDescription}>
-                    {showFullDescription ? 'Show Less' : 'Read More'}
-                </Button>
-                <Grid style={{ margin: '5px' }}>
-                    <Chip margin={'2px'} label={'Engine Count: ' + product.engineCount} variant="outlined" />
-                    <Chip label={'Engine Type: ' + product.engineType} variant="outlined" />
-                    <Chip label={'Purpose: ' + product.purpose} variant="outlined" />
-                </Grid>
-                <Typography variant="h6">
+                <Tooltip title={product.description} arrow placement="top">
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            WebkitLineClamp: 3,
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {product.description}
+                    </Typography>
+                </Tooltip>
+                <Stack spacing={2} sx={{ mt: 2 }}>
+                    <Typography variant="body2">
+                        <span style={{ fontWeight: 'bold' }}>Engine Count:</span> {product.engineCount}
+                    </Typography>
+                    <Typography variant="body2">
+                        <span style={{ fontWeight: 'bold' }}>Engine Type:</span> {product.engineType}
+                    </Typography>
+                    <Typography variant="body2">
+                        <span style={{ fontWeight: 'bold' }}>Purpose:</span> {product.purpose}
+                    </Typography>
+                </Stack>
+                <Typography variant="h6" sx={{ mt: 2 }}>
                     ${product.price}
                 </Typography>
                 <Typography variant="body2">
                     {product.orderCount} sold
                 </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'space-between', padding: 2 }}>
                 {onView && (
-                    <Button sx={{ boxShadow: 2 }} size="small" onClick={() => onView(product._id)}>
+                    <Button sx={{ boxShadow: 2, margin: 0 }} size="small" onClick={() => onView(product._id)}>
                         View
                     </Button>
                 )}
                 {onAddToCart && (
-                    <Button sx={{ boxShadow: 2 }} size="small" onClick={() => onAddToCart(product._id)}>
+                    <Button sx={{ boxShadow: 2, margin: 0 }} size="small" onClick={() => onAddToCart(product._id)}>
                         Add to Cart
                     </Button>
                 )}

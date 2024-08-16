@@ -36,6 +36,10 @@ class ApiService {
         return this.api.get('/auth/profile');
     }
 
+    changeUserPassword(currentPassword, newPassword) {
+        return this.api.put('/auth/change-password', { currentPassword, newPassword });
+    }
+
     // Admin endpoints
     getUsers() {
         return this.api.get('/admin/users');

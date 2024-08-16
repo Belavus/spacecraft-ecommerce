@@ -7,7 +7,9 @@ import {
     buttonHoverColor,
     textColor,
     lightColor,
-    cardBackgroundColor
+    cardBackgroundColor,
+    iconButtonHoverColor,
+    tooltipBackgroundColor,
 } from './colors';
 import { HEADER_HEIGHT } from './sizes';
 
@@ -43,10 +45,24 @@ export const components = {
             },
         },
     },
+    MuiBadge: {
+        styleOverrides: {
+            root: {
+                '& .MuiBadge-badge': {
+                    right: -4,
+                    top: -4,
+                    transform: 'scale(0.78)',
+                },
+            },
+        },
+    },
     MuiIconButton: {
         styleOverrides: {
             root: {
                 padding: 0,
+                '&:hover': {
+                    color: iconButtonHoverColor,
+                },
             },
         },
     },
@@ -60,24 +76,24 @@ export const components = {
                 padding: '5px 10px',
             },
             containedPrimary: {
-                backgroundColor: buttonColor,
+                backgroundColor: primaryColor,
                 color: textColor,
                 '&:hover': {
                     backgroundColor: buttonHoverColor,
                 },
             },
             containedSecondary: {
-                backgroundColor: primaryColor,
+                backgroundColor: secondaryColor,
                 color: textColor,
                 '&:hover': {
-                    backgroundColor: secondaryColor,
+                    backgroundColor: lightColor,
                 },
             },
             outlinedPrimary: {
                 borderColor: primaryColor,
                 color: primaryColor,
                 '&:hover': {
-                    backgroundColor: secondaryColor,
+                    backgroundColor: lightColor,
                     color: textColor,
                 },
             },
@@ -85,7 +101,7 @@ export const components = {
                 borderColor: secondaryColor,
                 color: secondaryColor,
                 '&:hover': {
-                    backgroundColor: secondaryColor,
+                    backgroundColor: lightColor,
                     color: textColor,
                 },
             },
@@ -103,6 +119,29 @@ export const components = {
                     backgroundColor: '#005bb5',
                     color: textColor,
                 },
+            },
+        },
+    },
+    MuiTooltip: {
+        styleOverrides: {
+            tooltip: {
+                backgroundColor: tooltipBackgroundColor,
+                color: textColor,
+                fontSize: '0.875rem',
+                maxWidth: 600,
+                padding: '10px',
+            },
+            arrow: {
+                color: tooltipBackgroundColor,
+            },
+        },
+    },
+    MuiPaper: {
+        styleOverrides: {
+            root: {
+                padding: 0,
+                borderRadius: 0,
+                boxShadow: 'none',
             },
         },
     },
@@ -132,9 +171,8 @@ export const components = {
                     backgroundColor: fallbackColor,
                 },
                 '&.Mui-focused': {
-                    color: lightColor
+                    color: lightColor,
                 },
-
                 '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
                     borderColor: secondaryColor,
                 },
@@ -142,7 +180,10 @@ export const components = {
                     borderColor: lightColor,
                 },
                 '& .MuiInputLabel-root': {
-                    color: lightColor,
+                    color: textColor,
+                    '&.Mui-focused': {
+                        color: lightColor,
+                    },
                 },
                 '& .MuiInputBase-input': {
                     color: textColor,

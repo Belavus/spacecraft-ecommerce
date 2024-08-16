@@ -8,7 +8,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { UserContext } from '../../contexts/UserContext';
 import { CartContext } from '../../contexts/CartContext';
-import logo from '../../resources/logo.png';
+import logo from '../../resources/logo.svg';
+import {Box} from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PersonIcon from '@mui/icons-material/Person';
+
 
 const Header = () => {
     const { user, logout } = useContext(UserContext);
@@ -24,20 +29,25 @@ const Header = () => {
         <AppBar>
             <Toolbar>
                 <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/">
-                    <img src={logo} alt="Logo" style={{ height: '100%', maxHeight: '64px' }} />
+                    <img src={logo} alt="Logo" style={{ height: '100%', maxHeight: '40px' }} />
                 </IconButton>
-                <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <IconButton color="inherit" component={Link} to="/cart">
                         <Badge badgeContent={cartItemCount} color="secondary">
-                            <ShoppingCartIcon />
+                            <ShoppingCartIcon/>
                         </Badge>
                     </IconButton>
                     {user ? (
                         <>
-                            <Button variant="contained" onClick={() => navigate(user.isAdmin ? '/admin' : '/profile')}>
-                                {user.isAdmin ? 'Admin' : 'Profile'}
-                            </Button>
-                            <Button variant="contained" onClick={handleLogout}>Logout</Button>
+                            <IconButton
+                                onClick={() => navigate(user.isAdmin ? '/admin' : '/profile')}
+                                color="inherit"
+                            >
+                                {user.isAdmin ? <AdminPanelSettingsIcon /> : <PersonIcon />}
+                            </IconButton>
+                            <IconButton onClick={handleLogout} color="inherit">
+                                <LogoutIcon />
+                            </IconButton>
                         </>
                     ) : (
                         <>
@@ -45,7 +55,8 @@ const Header = () => {
                             <Button color="inherit" component={Link} to="/register">Register</Button>
                         </>
                     )}
-                </div>
+                </Box>
+
             </Toolbar>
         </AppBar>
     );

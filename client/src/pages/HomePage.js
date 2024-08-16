@@ -5,12 +5,12 @@ import CanvasComponent from '../components/CanvasComponent';
 import Chat from '../components/Chat';
 import { useNavigate } from 'react-router-dom';
 import Button from "@mui/material/Button";
-import Carousel from 'react-material-ui-carousel';
-import { Paper, Typography, Grid } from '@mui/material';
-import apiService from '../services/ApiService';
-import ProductCard from "../components/ProductCard";
-import { CartContext } from "../contexts/CartContext";
 import PageContainer from '../components/PageContainer/PageContainer';
+import {CartContext} from "../contexts/CartContext";
+import apiService from "../services/ApiService";
+import {Box} from "@mui/material";
+import CarouselWithOverlay from "../components/CarouselWithOverlay/CarouselWithOverlay";
+import ProductGrid from "../components/ProductGrid/ProductGrid";
 
 const HomePage = () => {
     const { user } = useContext(UserContext);
@@ -25,11 +25,7 @@ const HomePage = () => {
             setIsAuthenticated(true);
         } else {
             const token = localStorage.getItem('token');
-            if (token) {
-                setIsAuthenticated(true);
-            } else {
-                setIsAuthenticated(false);
-            }
+            setIsAuthenticated(!!token);
         }
     }, [user]);
 
@@ -51,51 +47,23 @@ const HomePage = () => {
 
     return (
         <div>
-            {isAuthenticated ? (
-                <>
-                    <Carousel interval={5000}>
-                        {homePageInfo.carouselImages.map((image, index) => (
-                            <Paper key={index}>
-                                <img src={image} alt={`Carousel ${index}`} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
-                            </Paper>
-                        ))}
-                    </Carousel>
-
-                    <PageContainer withHeaderOffset={false}>
-                        <Typography variant="h6" align="center">
-                            {homePageInfo.welcomeText}
-                        </Typography>
-                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                            <Button variant="contained" onClick={() => navigate('/products')}>
-                                Browse Products
-                            </Button>
-                        </div>
-
-                        <Typography variant="h1">New Arrival</Typography>
-                        {loading ? (
-                            <p>Loading...</p>
-                        ) : error ? (
-                            <p>{error}</p>
-                        ) : (
-                            <Grid container spacing={3}>
-                                {latestProducts.map((product) => (
-                                    <Grid item key={product._id} xs={12} sm={6} md={3}>
-                                        <ProductCard
-                                            product={product}
-                                            onView={(id) => navigate(`/product/${id}`)}
-                                            onAddToCart={addToCart}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        )}
-                        <CanvasComponent />
-                        <Chat />
-                    </PageContainer>
-                </>
-            ) : (
-                <p>Please log in to see the content.</p>
-            )}
+            <CarouselWithOverlay images={homePageInfo.carouselImages} welcomeText={homePageInfo.welcomeText} />
+            <PageContainer withHeaderOffset={false}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Button variant="contained" onClick={() => navigate('/products')}>
+                        Browse Products
+                    </Button>
+                </Box>
+                <ProductGrid
+                    products={latestProducts}
+                    loading={loading}
+                    error={error}
+                    onView={(id) => navigate(`/product/${id}`)}
+                    onAddToCart={addToCart}
+                />
+                <CanvasComponent />
+                <Chat />
+            </PageContainer>
         </div>
     );
 };

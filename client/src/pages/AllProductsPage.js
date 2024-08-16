@@ -14,9 +14,9 @@ import {
     InputLabel, Box
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import ProductCard from '../components/ProductCard';
 import {CartContext} from '../contexts/CartContext';
 import PageContainer from "../components/PageContainer/PageContainer";
+import ProductGrid from '../components/ProductGrid/ProductGrid';
 
 const AllProductsPage = () => {
     const [products, setProducts] = useState([]);
@@ -29,6 +29,7 @@ const AllProductsPage = () => {
         priceRange: [0, 10000],
         sortOrder: 'asc'
     });
+    const [maxPrice, setMaxPrice] = useState(10000); // Добавляем состояние для максимальной цены
     const [uniqueValues, setUniqueValues] = useState({engineCounts: [], engineTypes: [], purposes: []});
     const navigate = useNavigate();
     const {addToCart} = useContext(CartContext);
@@ -39,6 +40,14 @@ const AllProductsPage = () => {
                 const res = await apiService.getProducts();
                 setProducts(res.data);
                 setFilteredProducts(res.data);
+
+                // Вычисляем максимальную цену среди продуктов
+                const maxProductPrice = Math.max(...res.data.map(product => product.price));
+                setMaxPrice(maxProductPrice);
+                setFilters(filters => ({
+                    ...filters,
+                    priceRange: [0, maxProductPrice] // Устанавливаем priceRange на основе максимальной цены
+                }));
             } catch (error) {
                 console.error('Failed to fetch products', error);
             }
@@ -93,7 +102,7 @@ const AllProductsPage = () => {
             engineType: null,
             purpose: null,
             searchQuery: '',
-            priceRange: [0, 10000],
+            priceRange: [0, maxPrice], // Сброс фильтров до максимальной цены
             sortOrder: 'asc'
         });
         setFilteredProducts(products);
@@ -149,7 +158,7 @@ const AllProductsPage = () => {
                         onChange={(event, newValue) => handleFilterChange('priceRange', newValue)}
                         valueLabelDisplay="auto"
                         min={0}
-                        max={10000} // Adjust the max value according to your product prices
+                        max={maxPrice} // Используем вычисленную максимальную цену
                         style={{marginBottom: '16px'}}
                     />
                     <FormControl fullWidth style={{marginBottom: '16px'}}>
@@ -178,17 +187,13 @@ const AllProductsPage = () => {
                 <Box style={{
                     flexGrow: 1,
                 }}>
-                    <Grid container spacing={4}>
-                        {filteredProducts.map((product) => (
-                            <Grid item key={product._id} xs={12} sm={6} md={4}>
-                                <ProductCard
-                                    product={product}
-                                    onView={handleViewProduct}
-                                    onAddToCart={addToCart}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <ProductGrid
+                        products={filteredProducts}
+                        loading={false}
+                        error={null}
+                        onView={handleViewProduct}
+                        onAddToCart={addToCart}
+                    />
                 </Box>
             </Grid>
         </PageContainer>

@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import PageContainer from '../components/PageContainer/PageContainer';
 import {CartContext} from "../contexts/CartContext";
 import apiService from "../services/ApiService";
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import CarouselWithOverlay from "../components/CarouselWithOverlay/CarouselWithOverlay";
 import ProductGrid from "../components/ProductGrid/ProductGrid";
 
@@ -54,6 +54,7 @@ const HomePage = () => {
                         Browse Products
                     </Button>
                 </Box>
+                <Typography variant="h1">New Arrival</Typography>
                 <ProductGrid
                     products={latestProducts}
                     loading={loading}

@@ -1,10 +1,23 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const { PASSWORD_MIN_LENGTH, EMAIL_REGEX } = require('../utils/constants');
 const bcrypt = require('bcryptjs');
 
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
+
+    // email validation
+    if (!EMAIL_REGEX.test(email)) {
+        res.status(400);
+        throw new Error('Invalid email format');
+    }
+
+    // password validation
+    if (password.length < PASSWORD_MIN_LENGTH) {
+        res.status(400);
+        throw new Error(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long`);
+    }
 
     const userExists = await User.findOne({ email });
 
@@ -17,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
         name,
         email,
         password,
-        isAdmin: false, // Регистрация обычного пользователя
+        isAdmin: false,
     });
 
     if (user) {
@@ -86,35 +99,35 @@ const changePassword = asyncHandler(async (req, res) => {
     }
 });
 
-const registerAdmin = asyncHandler(async (req, res) => {
-    const { name, email, password, isAdmin } = req.body;
+// const registerAdmin = asyncHandler(async (req, res) => {
+//     const { name, email, password, isAdmin } = req.body;
+//
+//     const userExists = await User.findOne({ email });
+//
+//     if (userExists) {
+//         res.status(400);
+//         throw new Error('User already exists');
+//     }
+//
+//     const user = await User.create({
+//         name,
+//         email,
+//         password,
+//         isAdmin,
+//     });
+//
+//     if (user) {
+//         res.status(201).json({
+//             _id: user._id,
+//             name: user.name,
+//             email: user.email,
+//             isAdmin: user.isAdmin,
+//             token: generateToken(user._id),
+//         });
+//     } else {
+//         res.status(400);
+//         throw new Error('Invalid user data');
+//     }
+// });
 
-    const userExists = await User.findOne({ email });
-
-    if (userExists) {
-        res.status(400);
-        throw new Error('User already exists');
-    }
-
-    const user = await User.create({
-        name,
-        email,
-        password,
-        isAdmin,
-    });
-
-    if (user) {
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            isAdmin: user.isAdmin,
-            token: generateToken(user._id),
-        });
-    } else {
-        res.status(400);
-        throw new Error('Invalid user data');
-    }
-});
-
-module.exports = { registerUser, loginUser, getUserProfile, registerAdmin, changePassword };
+module.exports = { registerUser, loginUser, getUserProfile, changePassword };

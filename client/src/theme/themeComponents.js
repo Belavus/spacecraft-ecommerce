@@ -9,7 +9,7 @@ import {
     lightColor,
     cardBackgroundColor,
     iconButtonHoverColor,
-    tooltipBackgroundColor,
+    tooltipBackgroundColor, checkBoxHoverColor,
 } from './colors';
 import { HEADER_HEIGHT } from './sizes';
 
@@ -264,6 +264,22 @@ export const components = {
             },
             iconEmpty: {
                 color: textColor,
+            },
+        },
+    },
+    MuiCheckbox: {
+        styleOverrides: {
+            root: {
+                '&:hover': {
+                    backgroundColor: checkBoxHoverColor,
+                    borderRadius: '5px',
+                },
+                '&.Mui-checked': {
+                    color: secondaryColor,
+                },
+                '&.Mui-checked:hover': {
+                    backgroundColor: checkBoxHoverColor,
+                },
             },
         },
     },

@@ -10,6 +10,8 @@ export const lightColor = '#00A8E8';
 export const warningColor = '#FF204E';
 export const iconButtonHoverColor = 'rgba(255, 255, 255, 0.8)';
 export const tooltipBackgroundColor = 'rgba(10, 20, 30, 0.95)';
+export const checkBoxHoverColor = 'rgba(255, 255, 255, 0.1)';
+
 
 export const palette = {
     primary: {

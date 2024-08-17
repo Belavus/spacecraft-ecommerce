@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, IconButton, Stack, Typography} from '@mui/material';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import theme from "../theme/theme";
+import mainTheme from "../theme/mainTheme";
 
 const Footer = () => {
     return (
@@ -11,7 +11,7 @@ const Footer = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: '20px',
-                backgroundColor: theme.palette.primary,
+                backgroundColor: mainTheme.palette.primary,
                 color: '#fff',
                 marginTop: 'auto',
             }}

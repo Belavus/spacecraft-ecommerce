@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, CardContent, CardMedia, Typography, CardActions, Button, Tooltip, Stack, Box} from '@mui/material';
+import {Card, CardContent, CardMedia, Typography, CardActions, Button, Tooltip, Stack} from '@mui/material';
 import Rating from '@mui/material/Rating';
 import {formatNumberWithCommas} from "../utils/utils";
 

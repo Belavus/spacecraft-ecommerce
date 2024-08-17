@@ -10,7 +10,7 @@ import apiService from "../services/ApiService";
 import {Box, Stack, Typography} from "@mui/material";
 import CarouselWithOverlay from "../components/CarouselWithOverlay/CarouselWithOverlay";
 import ProductGrid from "../components/ProductGrid/ProductGrid";
-import theme from "../theme/theme";
+import mainTheme from "../theme/mainTheme";
 
 const HomePage = () => {
     const {user} = useContext(UserContext);
@@ -43,7 +43,7 @@ const HomePage = () => {
         fetchProducts();
     }, []);
 
-    const latestProducts = products.slice(-4); // 4 newest products
+    const latestProducts = products.slice(-6); // 4 newest products
 
     return (
         <div>
@@ -53,7 +53,7 @@ const HomePage = () => {
                     Browse Products
                 </Button>
             </Box>
-            <Box sx={{backgroundColor: theme.palette.background.light}}>
+            <Box sx={{backgroundColor: mainTheme.palette.background.light}}>
                 <PageContainer withHeaderOffset={false}>
                     <Stack padding={3} spacing={1} alignItems={'center'}>
                         <Typography variant="h1">New Arrival</Typography>

@@ -8,22 +8,22 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminPage from './pages/AdminPage';
 import AllProductsPage from './pages/AllProductsPage';
-import Header from './components/Header/Header';
+import Header from './components/Header';
 import Footer from "./components/Footer";
-import PrivateRoute from './components/PrivateRoute';
-import AdminRoute from './components/AdminRoute';
+import PrivateRoute from './components/Routes/PrivateRoute';
+import AdminRoute from './components/Routes/AdminRoute';
 import { UserProvider } from './contexts/UserContext';
 import { ProductProvider } from './contexts/ProductContext';
 import { CartProvider } from './contexts/CartContext';
 import { OrderProvider } from "./contexts/OrderContext";
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import theme from "./theme/theme";
+import mainTheme from "./theme/mainTheme";
 import { Box } from '@mui/material';
 
 const App = () => {
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={mainTheme}>
             <CssBaseline />
             <Box sx={{
                 display: 'flex',

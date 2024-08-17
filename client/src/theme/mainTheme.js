@@ -4,7 +4,7 @@ import { typography } from './typography';
 import { components } from './themeComponents';
 import {HEADER_HEIGHT, PAGE_PADDING_TOP} from "./sizes";
 
-const theme = createTheme({
+const mainTheme = createTheme({
     palette,
     typography,
     components,
@@ -14,4 +14,4 @@ const theme = createTheme({
     },
 });
 
-export default theme;
+export default mainTheme;

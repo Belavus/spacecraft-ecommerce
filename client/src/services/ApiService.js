@@ -20,20 +20,8 @@ class ApiService {
     }
 
     // Auth endpoints
-    login(data) {
-        return this.api.post('/auth/login', data);
-    }
-
-    register(data) {
-        return this.api.post('/auth/register', data);
-    }
-
     registerAdmin(data) {
         return this.api.post('/admin/register', data);
-    }
-
-    getUserProfile() {
-        return this.api.get('/auth/profile');
     }
 
     changeUserPassword(currentPassword, newPassword) {
@@ -112,7 +100,6 @@ class ApiService {
     updateHomePageInfo(data) {
         return this.api.put('/homepage', data);
     }
-
 }
 
 const apiService = new ApiService(process.env.REACT_APP_API_URL || 'http://localhost:5000/api');

@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, Card, CardContent, CardMedia, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {formatNumberWithCommas} from "../utils/utils";
-import theme from "../theme/theme";
+import mainTheme from "../theme/mainTheme";
 
 const SmallProductCard = ({product}) => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const SmallProductCard = ({product}) => {
 
     return (
         <Card sx={{
-            backgroundColor: theme.palette.background.light,
+            backgroundColor: mainTheme.palette.background.light,
             maxWidth: 150,
             cursor: 'pointer',
             display: 'flex',

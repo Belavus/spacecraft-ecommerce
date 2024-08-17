@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import apiService from '../services/ApiService';
 
-const OrderContext = createContext();
+const OrderContext = createContext(undefined);
 
 const OrderProvider = ({ children }) => {
     const [orders, setOrders] = useState([]);

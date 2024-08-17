@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TextField, Button, Typography, Box, Stack} from '@mui/material';
 import apiService from '../services/ApiService';
 
@@ -7,17 +7,17 @@ const HomePageManage = () => {
     const [welcomeText, setWelcomeText] = useState('');
     const [newImageUrl, setNewImageUrl] = useState('');
 
-    useEffect(() => {
-        const fetchHomePageInfo = async () => {
-            try {
-                const res = await apiService.getHomePageInfo();
-                setCarouselImages(res.data.carouselImages);
-                setWelcomeText(res.data.welcomeText);
-            } catch (error) {
-                console.error('Failed to fetch home page info', error);
-            }
-        };
+    const fetchHomePageInfo = async () => {
+        try {
+            const res = await apiService.getHomePageInfo();
+            setCarouselImages(res.data.carouselImages);
+            setWelcomeText(res.data.welcomeText);
+        } catch (error) {
+            console.error('Failed to fetch home page info', error);
+        }
+    };
 
+    useEffect(() => {
         fetchHomePageInfo();
     }, []);
 

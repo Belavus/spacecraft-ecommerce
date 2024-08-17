@@ -17,7 +17,7 @@ import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
 import PageContainer from "../components/PageContainer/PageContainer";
 import { formatNumberWithCommas } from "../utils/utils";
-import theme from "../theme/theme";
+import mainTheme from "../theme/mainTheme";
 
 const CartPage = () => {
     const { user } = useContext(UserContext);
@@ -188,7 +188,7 @@ const CartPage = () => {
                     <Grid container spacing={4}>
                         {orders.map((order) => (
                             <Grid item key={order._id} xs={12}>
-                                <Box padding={3} bgcolor={theme.palette.background.paper}>
+                                <Box padding={3} bgcolor={mainTheme.palette.background.paper}>
                                     <Typography gutterBottom variant="h5" component="div">
                                         Order ID: {order._id}
                                     </Typography>

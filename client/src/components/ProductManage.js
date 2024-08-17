@@ -11,7 +11,7 @@ import {
     Paper,
     Typography,
     Modal,
-    CircularProgress, Box
+    CircularProgress, Box, Grid, Stack, Container
 } from '@mui/material';
 import apiService from "../services/ApiService";
 
@@ -102,23 +102,36 @@ const ProductManage = () => {
     }
 
     return (
-        <div>
+        <Box>
             <Typography variant="h6">Add New Product</Typography>
-            <TextField label="Name" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} />
-            <TextField label="Price" type="number" value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: parseFloat(e.target.value) })} />
-            <TextField label="Description" value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} />
-            <TextField label="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
-            <TextField label="Video URL" value={newProduct.videoUrl} onChange={(e) => setNewProduct({ ...newProduct, videoUrl: e.target.value })} />
-            <TextField label="Engine Count" type="number" value={newProduct.engineCount} onChange={(e) => setNewProduct({ ...newProduct, engineCount: parseInt(e.target.value) })} />
-            <TextField label="Engine Type" value={newProduct.engineType} onChange={(e) => setNewProduct({ ...newProduct, engineType: e.target.value })} />
-            <TextField label="Purpose" value={newProduct.purpose} onChange={(e) => setNewProduct({ ...newProduct, purpose: e.target.value })} />
-            <Button variant="contained" color="primary" onClick={handleAddProduct}>Add Product</Button>
+            <Stack spacing={2}>
+                <TextField label="Name" value={newProduct.name}
+                           onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}/>
+                <TextField label="Description" value={newProduct.description}
+                           onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}/>
+                <TextField label="Image URL" value={newProduct.imageUrl}
+                           onChange={(e) => setNewProduct({...newProduct, imageUrl: e.target.value})}/>
+                <TextField label="Video URL" value={newProduct.videoUrl}
+                           onChange={(e) => setNewProduct({...newProduct, videoUrl: e.target.value})}/>
+                <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
+                    <TextField label="Price" type="number" value={newProduct.price}
+                               onChange={(e) => setNewProduct({...newProduct, price: parseFloat(e.target.value)})}/>
+                    <TextField label="Engine Count" type="number" value={newProduct.engineCount}
+                               onChange={(e) => setNewProduct({...newProduct, engineCount: parseInt(e.target.value)})}/>
+                    <TextField label="Engine Type" value={newProduct.engineType}
+                               onChange={(e) => setNewProduct({...newProduct, engineType: e.target.value})}/>
+                    <TextField label="Purpose" value={newProduct.purpose}
+                               onChange={(e) => setNewProduct({...newProduct, purpose: e.target.value})}/>
+                </Stack>
+                <Button color="primary" onClick={handleAddProduct}>Add Product</Button>
+            </Stack>
 
             <Typography variant="h6">Products</Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <TableCell>Actions</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>Price</TableCell>
                             <TableCell>Description</TableCell>
@@ -127,12 +140,19 @@ const ProductManage = () => {
                             <TableCell>Engine Count</TableCell>
                             <TableCell>Engine Type</TableCell>
                             <TableCell>Purpose</TableCell>
-                            <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {products.map((product) => (
                             <TableRow key={product._id}>
+                                <TableCell>
+                                    <Button variant="contained" onClick={() => handleOpen(product)}>
+                                        Edit
+                                    </Button>
+                                    <Button variant="contained" onClick={() => handleDeleteProduct(product._id)}>
+                                        Delete
+                                    </Button>
+                                </TableCell>
                                 <TableCell>{product.name}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell
@@ -148,17 +168,9 @@ const ProductManage = () => {
                                 </TableCell>
                                 <TableCell>{product.imageUrl}</TableCell>
                                 <TableCell>{product.videoUrl}</TableCell>
-                                <TableCell>{product.engineCount}</TableCell>
+                                <TableCell align={"center"}>{product.engineCount}</TableCell>
                                 <TableCell>{product.engineType}</TableCell>
                                 <TableCell>{product.purpose}</TableCell>
-                                <TableCell>
-                                    <Button variant="contained" onClick={() => handleOpen(product)}>
-                                        Edit
-                                    </Button>
-                                    <Button variant="contained" onClick={() => handleDeleteProduct(product._id)}>
-                                        Delete
-                                    </Button>
-                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -253,7 +265,7 @@ const ProductManage = () => {
                     </Button>
                 </Box>
             </Modal>
-        </div>
+        </Box>
     );
 };
 

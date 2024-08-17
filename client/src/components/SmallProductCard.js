@@ -1,9 +1,16 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const SmallProductCard = ({ product }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/product/${product._id}`);
+    };
+
     return (
-        <Card style={{ maxWidth: 150 }}>
+        <Card style={{ maxWidth: 150, cursor: 'pointer' }} onClick={handleClick}>
             <CardMedia
                 component="img"
                 height="150"

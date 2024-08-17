@@ -69,6 +69,7 @@ export const components = {
     MuiButton: {
         styleOverrides: {
             root: {
+                boxShadow: '0 10px 8px rgba(0, 0, 0, 0.2)',
                 margin: '2px',
                 borderRadius: '8px',
                 textTransform: 'none',
@@ -76,6 +77,7 @@ export const components = {
                 padding: '5px 10px',
             },
             containedPrimary: {
+                boxShadow: '5px 5px 8px rgba(0, 0, 0, 0.2)',
                 backgroundColor: primaryColor,
                 color: textColor,
                 '&:hover': {

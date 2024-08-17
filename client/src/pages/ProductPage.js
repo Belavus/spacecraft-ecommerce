@@ -12,7 +12,7 @@ import {
     Box,
     Modal,
     Rating,
-    IconButton
+    IconButton, Stack, Divider
 } from '@mui/material';
 import {CartContext} from '../contexts/CartContext';
 import PageContainer from "../components/PageContainer/PageContainer";
@@ -81,12 +81,22 @@ const ProductPage = () => {
         <PageContainer>
             <Container>
                 <Card>
-                    <CardMedia
-                        component="img"
-                        height="300"
-                        image={product.imageUrl}
-                        alt={product.name}
-                    />
+                    <Box sx={{overflow: 'hidden', position: 'relative'}}>
+                        <CardMedia
+                            component="img"
+                            sx={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover',
+                                transition: 'transform 0.3s ease',
+                                '&:hover': {
+                                    transform: 'scale(1.5)',
+                                },
+                            }}
+                            image={product.imageUrl}
+                            alt={product.name}
+                        />
+                    </Box>
                     <CardContent>
                         <Typography gutterBottom variant="h4" component="div">
                             {product.name}
@@ -105,21 +115,23 @@ const ProductPage = () => {
                             </Typography>
                         </Box>
 
-                        <Typography variant="body1" color="textSecondary">
-                            {product.description}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            Engine Count: {product.engineCount}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            Engine Type: {product.engineType}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            Purpose: {product.purpose}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            {product.orderCount} sold
-                        </Typography>
+                        <Stack spacing={2}>
+                            <Typography variant="body1" color="textSecondary">
+                                {product.description}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Engine Count: {product.engineCount}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Engine Type: {product.engineType}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Purpose: {product.purpose}
+                            </Typography>
+                            <Typography variant="body1" color="textSecondary">
+                                {product.orderCount} sold
+                            </Typography>
+                        </Stack>
                         <Typography variant="h6" color="textPrimary" style={{marginTop: '16px'}}>
                             Price: ${product.price}
                         </Typography>

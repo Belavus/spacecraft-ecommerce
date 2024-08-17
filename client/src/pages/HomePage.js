@@ -62,8 +62,6 @@ const HomePage = () => {
                     onView={(id) => navigate(`/product/${id}`)}
                     onAddToCart={addToCart}
                 />
-                <CanvasComponent />
-                <Chat />
             </PageContainer>
         </div>
     );

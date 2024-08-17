@@ -1,9 +1,20 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {Container, Grid, Typography, CircularProgress, Button, Card, CardContent, TextField, Box} from '@mui/material';
+import {
+    Container,
+    Grid,
+    Typography,
+    CircularProgress,
+    Button,
+    Card,
+    CardContent,
+    TextField,
+    Box,
+    Stack
+} from '@mui/material';
 import apiService from '../services/ApiService';
 import {UserContext} from '../contexts/UserContext';
 import {CartContext} from '../contexts/CartContext';
-import {ProductContext} from '../contexts/ProductContext'
+import {ProductContext} from '../contexts/ProductContext';
 import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
 import PageContainer from "../components/PageContainer/PageContainer";
@@ -15,6 +26,7 @@ const CartPage = () => {
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [quantity, setQuantity] = useState({});
+    const [timeoutId, setTimeoutId] = useState(null);
 
     const fetchOrders = async () => {
         try {
@@ -30,27 +42,33 @@ const CartPage = () => {
     useEffect(() => {
         fetchOrders();
         updateCart();
-        setLoadingOrders(false)
+        setLoadingOrders(false);
     }, [user, updateCart]);
-
-    const handleRemoveItem = async (productId) => {
-        try {
-            await removeFromCart(productId);
-        } catch (error) {
-            console.error('Failed to remove item from cart', error);
-        }
-    };
 
     const handleQuantityChange = (productId, newQuantity) => {
         setQuantity(prevQuantity => ({
             ...prevQuantity,
             [productId]: newQuantity
         }));
+
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = setTimeout(() => {
+            if (newQuantity > 0) {
+                updateCartQuantity(productId, newQuantity);
+            }
+        }, 500); // Задержка 500 мс
+
+        setTimeoutId(newTimeoutId);
     };
 
-    const handleSetQuantity = (productId) => {
-        if (quantity[productId] && quantity[productId] > 0) {
-            updateCartQuantity(productId, quantity[productId]);
+    const handleRemoveItem = async (productId) => {
+        try {
+            await removeFromCart(productId);
+        } catch (error) {
+            console.error('Failed to remove item from cart', error);
         }
     };
 
@@ -98,32 +116,30 @@ const CartPage = () => {
                         <Grid container spacing={4}>
                             {cart.items.map((item) => (
                                 item.product ? (
-                                    <Grid item key={item.product._id} xs={12} sm={6} md={4}>
-                                        <Box sx={{ width: 300}}>
-                                            <ProductCard
-                                                product={item.product}
-                                                onView={null}
-                                                onAddToCart={null}
-                                            />
-                                            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
-                                                <TextField sx={{width:'50%'}}
-                                                    type="number"
-                                                    label="Quantity"
-                                                    variant="outlined"
-                                                    value={quantity[item.product._id] || item.quantity}
-                                                    onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
-                                                    inputProps={{ min: 1 }}
+                                    <Grid item key={item.product._id} xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
+                                        <Stack spacing={1} sx={{ width: '100%', height: '100%' }}>
+                                            <Box sx={{ flexGrow: 1 }}>
+                                                <ProductCard
+                                                    product={item.product}
+                                                    onView={null}
+                                                    onAddToCart={null}
                                                 />
-                                                <Button sx={{ height: '40px'}} onClick={() => handleSetQuantity(item.product._id)}
-                                                >
-                                                    Set
-                                                </Button>
-                                                <Button sx={{ height: '40px' }} onClick={() => handleRemoveItem(item.product._id)}
-                                                >
-                                                    Remove
-                                                </Button>
                                             </Box>
-                                        </Box>
+                                            <TextField
+                                                sx={{width: '50%'}}
+                                                type="number"
+                                                label="Quantity"
+                                                variant="outlined"
+                                                value={quantity[item.product._id] || item.quantity}
+                                                onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
+                                                inputProps={{min: 1}}
+                                            />
+                                            <Button sx={{height: '40px'}}
+                                                    onClick={() => handleRemoveItem(item.product._id)}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </Stack>
                                     </Grid>
                                 ) : (
                                     <Grid item key={item._id} xs={12} sm={6} md={4}>
@@ -141,12 +157,14 @@ const CartPage = () => {
                                 )
                             ))}
                         </Grid>
-                        <Typography variant="h6">
-                            Total: ${calculateCartTotal()}
-                        </Typography>
-                        <Button variant="contained" color="primary" onClick={handlePlaceOrder}>
-                            Place Order
-                        </Button>
+                        <Stack spacing={2}>
+                            <Typography variant="h6">
+                                Total: ${calculateCartTotal()}
+                            </Typography>
+                            <Button variant="contained" color="primary" onClick={handlePlaceOrder}>
+                                Place Order
+                            </Button>
+                        </Stack>
                     </Box>
                 ) : (
                     <Typography variant="h6">Your cart is empty</Typography>

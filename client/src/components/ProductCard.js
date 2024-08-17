@@ -4,7 +4,7 @@ import Rating from '@mui/material/Rating';
 
 const ProductCard = ({ product, onView, onAddToCart }) => {
     return (
-        <Card sx={{ width: 300, boxShadow: 3, borderRadius: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Card sx={{ boxShadow: 3, borderRadius: 2, display: 'flex', flexDirection: 'column', height:'100%' }}>
             <CardMedia
                 component="img"
                 sx={{ height: 180, objectFit: 'cover' }}

@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import apiService from '../services/ApiService';
 import {
-    Container,
     Grid,
     Typography,
     Autocomplete,
@@ -11,7 +10,7 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel, Box
+    InputLabel, Box, Stack
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {CartContext} from '../contexts/CartContext';
@@ -29,7 +28,8 @@ const AllProductsPage = () => {
         priceRange: [0, 10000],
         sortOrder: 'asc'
     });
-    const [maxPrice, setMaxPrice] = useState(10000); // Добавляем состояние для максимальной цены
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(35000000);
     const [uniqueValues, setUniqueValues] = useState({engineCounts: [], engineTypes: [], purposes: []});
     const navigate = useNavigate();
     const {addToCart} = useContext(CartContext);
@@ -41,12 +41,15 @@ const AllProductsPage = () => {
                 setProducts(res.data);
                 setFilteredProducts(res.data);
 
-                // Вычисляем максимальную цену среди продуктов
-                const maxProductPrice = Math.max(...res.data.map(product => product.price));
+                // calculate min and max prices
+                const productPrices = res.data.map(product => product.price);
+                const minProductPrice = Math.min(...productPrices);
+                const maxProductPrice = Math.max(...productPrices);
+                setMinPrice(minProductPrice);
                 setMaxPrice(maxProductPrice);
                 setFilters(filters => ({
                     ...filters,
-                    priceRange: [0, maxProductPrice] // Устанавливаем priceRange на основе максимальной цены
+                    priceRange: [minProductPrice, maxProductPrice]
                 }));
             } catch (error) {
                 console.error('Failed to fetch products', error);
@@ -102,7 +105,7 @@ const AllProductsPage = () => {
             engineType: null,
             purpose: null,
             searchQuery: '',
-            priceRange: [0, maxPrice], // Сброс фильтров до максимальной цены
+            priceRange: [minPrice, maxPrice],
             sortOrder: 'asc'
         });
         setFilteredProducts(products);
@@ -110,10 +113,9 @@ const AllProductsPage = () => {
 
     return (
         <PageContainer>
-            <Grid style={{display: 'flex', flexDirection: 'row', width: '100%', padding: '15px'}}>
-                <Box style={{
+            <Stack direction="row">
+                <Stack style={{
                     minWidth: '350px',
-                    flexDirection: 'row',
                     paddingRight: '20px',
                 }}>
                     <TextField
@@ -157,11 +159,11 @@ const AllProductsPage = () => {
                         value={filters.priceRange}
                         onChange={(event, newValue) => handleFilterChange('priceRange', newValue)}
                         valueLabelDisplay="auto"
-                        min={0}
+                        min={minPrice} // Используем вычисленную минимальную цену
                         max={maxPrice} // Используем вычисленную максимальную цену
                         style={{marginBottom: '16px'}}
                     />
-                    <FormControl fullWidth style={{marginBottom: '16px'}}>
+                    <FormControl>
                         <InputLabel id="sortOrder-label">Sort</InputLabel>
                         <Select
                             labelId="sortOrder-label"
@@ -182,7 +184,7 @@ const AllProductsPage = () => {
                             style={{marginBottom: '16px', width: '100%'}}>
                         Reset Filters
                     </Button>
-                </Box>
+                </Stack>
 
                 <Box style={{
                     flexGrow: 1,
@@ -195,7 +197,7 @@ const AllProductsPage = () => {
                         onAddToCart={addToCart}
                     />
                 </Box>
-            </Grid>
+            </Stack>
         </PageContainer>
     );
 };

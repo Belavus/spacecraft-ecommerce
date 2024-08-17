@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {TextField, Button, Typography, Box} from '@mui/material';
+import React, {useState, useEffect, useContext} from 'react';
+import {TextField, Button, Typography, Box, Stack} from '@mui/material';
 import apiService from '../services/ApiService';
 
 const HomePageManage = () => {
@@ -32,7 +32,7 @@ const HomePageManage = () => {
 
     const handleSaveChanges = async () => {
         try {
-            await apiService.updateHomePageInfo({ carouselImages, welcomeText });
+            await apiService.updateHomePageInfo({carouselImages, welcomeText});
             alert('HomePage info updated successfully');
         } catch (error) {
             console.error('Failed to update home page info', error);
@@ -47,33 +47,34 @@ const HomePageManage = () => {
                 value={welcomeText}
                 onChange={(e) => setWelcomeText(e.target.value)}
                 fullWidth
-                style={{ marginBottom: '16px' }}
+                style={{marginBottom: '16px'}}
             />
             <Typography variant="h6">Carousel Images</Typography>
             {carouselImages.map((image, index) => (
-                <div key={index} style={{ marginBottom: '16px' }}>
+                <div key={index} style={{marginBottom: '16px'}}>
                     <TextField
                         value={image}
                         fullWidth
                         InputProps={{
                             readOnly: true,
                         }}
-                        style={{ marginBottom: '8px' }}
+                        style={{marginBottom: '8px'}}
                     />
-                    <Button variant="contained" color="secondary" onClick={() => handleRemoveImage(index)}>Remove</Button>
+                    <Button variant="contained" color="primary" onClick={() => handleRemoveImage(index)}>Remove</Button>
                 </div>
             ))}
+
             <TextField
                 label="New Image URL"
                 value={newImageUrl}
                 onChange={(e) => setNewImageUrl(e.target.value)}
                 fullWidth
-                style={{ marginBottom: '16px' }}
+                style={{marginBottom: '16px'}}
             />
             <Button variant="contained" color="primary" onClick={handleAddImage}>Add Image</Button>
-            <div style={{ marginTop: '16px' }}>
-                <Button variant="contained" color="primary" onClick={handleSaveChanges}>Save Changes</Button>
-            </div>
+            <Stack mt={2} mb={5}>
+                <Button variant="contained" color="secondary" onClick={handleSaveChanges}>Save Changes</Button>
+            </Stack>
         </Box>
     );
 };

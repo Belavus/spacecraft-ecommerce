@@ -103,7 +103,7 @@ const ProductManage = () => {
 
     return (
         <Box>
-            <Typography variant="h6">Add New Product</Typography>
+            <Typography mb={3} variant="h6">Add New Product</Typography>
             <Stack spacing={2}>
                 <TextField label="Name" value={newProduct.name}
                            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}/>
@@ -126,7 +126,7 @@ const ProductManage = () => {
                 <Button color="primary" onClick={handleAddProduct}>Add Product</Button>
             </Stack>
 
-            <Typography variant="h6">Products</Typography>
+            <Typography mt={5} mb={3} variant="h6">Products</Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

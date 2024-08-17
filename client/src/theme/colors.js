@@ -1,6 +1,6 @@
 export const backgroundGradient = 'linear-gradient(135deg, #000000, #0C1E36)';
+export const backgroundLight = '#14141C';
 export const primaryColor = '#0C1E36';
-// export const secondaryColor = '#007BFF';
 export const secondaryColor = '#007BFF';
 export const fallbackColor = '#000000';
 export const cardBackgroundColor = '#0C1E36';
@@ -24,6 +24,7 @@ export const palette = {
     },
     background: {
         default: fallbackColor,
+        light: backgroundLight,
         paper: cardBackgroundColor,
     },
     text: {

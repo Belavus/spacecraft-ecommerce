@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import apiService from '../services/ApiService';
 import {
     Container,
@@ -12,16 +12,17 @@ import {
     Box,
     Modal,
     Rating,
-    IconButton, Stack, Divider
+    Stack
 } from '@mui/material';
-import {CartContext} from '../contexts/CartContext';
+import { CartContext } from '../contexts/CartContext';
 import PageContainer from "../components/PageContainer/PageContainer";
+import { formatNumberWithCommas } from "../utils/utils";
 
 const ProductPage = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const {addToCart} = useContext(CartContext);
+    const { addToCart } = useContext(CartContext);
     const [userRating, setUserRating] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -70,7 +71,7 @@ const ProductPage = () => {
     };
 
     if (loading) {
-        return <CircularProgress/>;
+        return <CircularProgress />;
     }
 
     if (!product) {
@@ -81,7 +82,7 @@ const ProductPage = () => {
         <PageContainer>
             <Container>
                 <Card>
-                    <Box sx={{overflow: 'hidden', position: 'relative'}}>
+                    <Box sx={{ overflow: 'hidden', position: 'relative' }}>
                         <CardMedia
                             component="img"
                             sx={{
@@ -101,42 +102,46 @@ const ProductPage = () => {
                         <Typography gutterBottom variant="h4" component="div">
                             {product.name}
                         </Typography>
-                        <Box onClick={handleOpenModal}
-                             sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <Rating
-                                name="product-rating"
-                                value={product.rating}
-                                onClick={handleOpenModal}
-                                precision={0.5}
-                                readOnly
-                            />
-                            <Typography paddingX="5px">
-                                {product.rating}
-                            </Typography>
-                        </Box>
 
                         <Stack spacing={2}>
-                            <Typography variant="body1" color="textSecondary">
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <Rating
+                                    name="product-rating"
+                                    value={product.rating}
+                                    precision={0.5}
+                                    readOnly
+                                    onClick={handleOpenModal}
+                                />
+                                <Typography variant="body2">
+                                    ({product.orderCount} sold)
+                                </Typography>
+                            </Stack>
+                            <Typography variant="body2">
                                 {product.description}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Engine Count: {product.engineCount}
+                            <Typography variant="body2">
+                                <span style={{ fontWeight: 'bold' }}>Engine Count:</span> {product.engineCount}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Engine Type: {product.engineType}
+                            <Typography variant="body2">
+                                <span style={{ fontWeight: 'bold' }}>Engine Type:</span> {product.engineType}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                                Purpose: {product.purpose}
-                            </Typography>
-                            <Typography variant="body1" color="textSecondary">
-                                {product.orderCount} sold
+                            <Typography variant="body2">
+                                <span style={{ fontWeight: 'bold' }}>Purpose:</span> {product.purpose}
                             </Typography>
                         </Stack>
-                        <Typography variant="h6" color="textPrimary" style={{marginTop: '16px'}}>
-                            Price: ${product.price}
-                        </Typography>
+                        <Stack direction="row" justifyContent="flex-end" sx={{ mt: 2 }}>
+                            <Stack spacing={1} justifyContent="flex-end" alignItems={"flex-end"}>
+                                <Typography variant="h6" color="textPrimary" lineHeight={1}>
+                                    {formatNumberWithCommas(product.price)} $
+                                </Typography>
+                                <Button onClick={handleAddToCart} sx={{ mt: 1 }}>
+                                    Add to Cart
+                                </Button>
+                            </Stack>
+                        </Stack>
+
                         {product.videoUrl && (
-                            <div style={{marginTop: '16px'}}>
+                            <div style={{ marginTop: '16px' }}>
                                 <Typography variant="h6" color="textPrimary">
                                     Product Video
                                 </Typography>
@@ -151,10 +156,6 @@ const ProductPage = () => {
                                 ></iframe>
                             </div>
                         )}
-                        <Button variant="contained" color="primary" onClick={handleAddToCart}
-                                style={{marginTop: '16px'}}>
-                            Add to Cart
-                        </Button>
                     </CardContent>
                 </Card>
 
@@ -187,7 +188,7 @@ const ProductPage = () => {
                             onChange={(event, newValue) => handleRatingChange(newValue)}
                             precision={0.5}
                         />
-                        <Box sx={{display: 'flex', justifyContent: 'flex-end', marginTop: 2}}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
                             <Button onClick={handleCloseModal} color="secondary">
                                 Cancel
                             </Button>

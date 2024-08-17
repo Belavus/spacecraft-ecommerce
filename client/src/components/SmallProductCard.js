@@ -1,8 +1,10 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import {Box, Card, CardContent, CardMedia, Typography} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+import {formatNumberWithCommas} from "../utils/utils";
+import theme from "../theme/theme";
 
-const SmallProductCard = ({ product }) => {
+const SmallProductCard = ({product}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -10,21 +12,32 @@ const SmallProductCard = ({ product }) => {
     };
 
     return (
-        <Card style={{ maxWidth: 150, cursor: 'pointer' }} onClick={handleClick}>
+        <Card sx={{
+            backgroundColor: theme.palette.background.light,
+            maxWidth: 150,
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+        }} onClick={handleClick}>
             <CardMedia
                 component="img"
                 height="150"
                 image={product.imageUrl}
                 alt={product.name}
-                style={{ objectFit: 'cover' }}
+                style={{objectFit: 'cover'}}
             />
-            <CardContent>
-                <Typography gutterBottom variant="body1" component="div">
-                    {product.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    ${product.price}
-                </Typography>
+            <CardContent sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                <Box>
+                    <Typography gutterBottom variant="body1" component="div">
+                        {product.name}
+                    </Typography>
+                </Box>
+                <Box sx={{mt: 'auto'}}>
+                    <Typography variant="body2" color="text.secondary" align="right">
+                        {formatNumberWithCommas(product.price)} $
+                    </Typography>
+                </Box>
             </CardContent>
         </Card>
     );

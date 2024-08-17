@@ -1,30 +1,31 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Container,
     Grid,
     Typography,
     CircularProgress,
     Button,
-    Card,
-    CardContent,
     TextField,
     Box,
     Stack
 } from '@mui/material';
 import apiService from '../services/ApiService';
-import {UserContext} from '../contexts/UserContext';
-import {CartContext} from '../contexts/CartContext';
-import {ProductContext} from '../contexts/ProductContext';
+import { UserContext } from '../contexts/UserContext';
+import { CartContext } from '../contexts/CartContext';
+import { ProductContext } from '../contexts/ProductContext';
 import ProductCard from '../components/ProductCard';
 import SmallProductCard from '../components/SmallProductCard';
 import PageContainer from "../components/PageContainer/PageContainer";
+import { formatNumberWithCommas } from "../utils/utils";
+import theme from "../theme/theme";
 
 const CartPage = () => {
-    const {user} = useContext(UserContext);
-    const {cart, updateCart, removeFromCart, updateCartQuantity} = useContext(CartContext);
-    const {fetchProducts} = useContext(ProductContext);
+    const { user } = useContext(UserContext);
+    const { cart, updateCart, removeFromCart, updateCartQuantity } = useContext(CartContext);
+    const { fetchProducts } = useContext(ProductContext);
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(true);
+    const [loadingCart, setLoadingCart] = useState(true); // Отдельное состояние для загрузки корзины
     const [quantity, setQuantity] = useState({});
     const [timeoutId, setTimeoutId] = useState(null);
 
@@ -40,9 +41,13 @@ const CartPage = () => {
     };
 
     useEffect(() => {
+        const loadCart = async () => {
+            await updateCart();
+            setLoadingCart(false);
+        };
+
         fetchOrders();
-        updateCart();
-        setLoadingOrders(false);
+        loadCart();
     }, [user, updateCart]);
 
     const handleQuantityChange = (productId, newQuantity) => {
@@ -101,8 +106,14 @@ const CartPage = () => {
         }, 0);
     };
 
-    if (loadingOrders) {
-        return <PageContainer><CircularProgress/></PageContainer>;
+    if (loadingCart || loadingOrders) {
+        return (
+            <PageContainer>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <CircularProgress />
+                </Box>
+            </PageContainer>
+        );
     }
 
     return (
@@ -117,7 +128,7 @@ const CartPage = () => {
                             {cart.items.map((item) => (
                                 item.product ? (
                                     <Grid item key={item.product._id} xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
-                                        <Stack spacing={1} sx={{ width: '100%', height: '100%' }}>
+                                        <Stack spacing={3} sx={{ width: '100%', height: '100%' }}>
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <ProductCard
                                                     product={item.product}
@@ -126,15 +137,14 @@ const CartPage = () => {
                                                 />
                                             </Box>
                                             <TextField
-                                                sx={{width: '50%'}}
                                                 type="number"
                                                 label="Quantity"
                                                 variant="outlined"
                                                 value={quantity[item.product._id] || item.quantity}
                                                 onChange={(e) => handleQuantityChange(item.product._id, parseInt(e.target.value))}
-                                                inputProps={{min: 1}}
+                                                inputProps={{ min: 1 }}
                                             />
-                                            <Button sx={{height: '40px'}}
+                                            <Button variant="contained" color="primary" sx={{ height: '40px' }}
                                                     onClick={() => handleRemoveItem(item.product._id)}
                                             >
                                                 Remove
@@ -157,11 +167,12 @@ const CartPage = () => {
                                 )
                             ))}
                         </Grid>
+                        <Box height={25} />
                         <Stack spacing={2}>
                             <Typography variant="h6">
                                 Total: ${calculateCartTotal()}
                             </Typography>
-                            <Button variant="contained" color="primary" onClick={handlePlaceOrder}>
+                            <Button onClick={handlePlaceOrder}>
                                 Place Order
                             </Button>
                         </Stack>
@@ -170,38 +181,36 @@ const CartPage = () => {
                     <Typography variant="h6">Your cart is empty</Typography>
                 )}
 
-                <Typography variant="h4" gutterBottom>
+                <Typography mt={5} variant="h4" gutterBottom>
                     Your Orders
                 </Typography>
                 {orders.length > 0 ? (
                     <Grid container spacing={4}>
                         {orders.map((order) => (
                             <Grid item key={order._id} xs={12}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Order ID: {order._id}
-                                        </Typography>
-                                        <Grid container spacing={2}>
-                                            {order.items.map((item) => (
-                                                <Grid item key={item.product._id} xs={6} sm={4} md={3}>
-                                                    <SmallProductCard
-                                                        product={item.product}
-                                                    />
-                                                    <Typography variant="body1" color="textSecondary">
-                                                        Quantity: {item.quantity}
-                                                    </Typography>
-                                                </Grid>
-                                            ))}
-                                        </Grid>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Order Date: {new Date(order.createdAt).toLocaleDateString()}
-                                        </Typography>
-                                        <Typography variant="h6">
-                                            Total: ${calculateOrderTotal(order)}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                <Box padding={3} bgcolor={theme.palette.background.paper}>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        Order ID: {order._id}
+                                    </Typography>
+                                    <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+                                        {order.items.map((item) => (
+                                            <Stack spacing={2} key={item.product._id}>
+                                                <SmallProductCard
+                                                    product={item.product}
+                                                />
+                                                <Typography variant="body1" color="textSecondary">
+                                                    Quantity: {item.quantity}
+                                                </Typography>
+                                            </Stack>
+                                        ))}
+                                    </Stack>
+                                    <Typography mt={4} variant="body2" color="textSecondary">
+                                        Order Date: {new Date(order.createdAt).toLocaleDateString()}
+                                    </Typography>
+                                    <Typography variant="h6">
+                                        Total: {formatNumberWithCommas(calculateOrderTotal(order))} $
+                                    </Typography>
+                                </Box>
                             </Grid>
                         ))}
                     </Grid>

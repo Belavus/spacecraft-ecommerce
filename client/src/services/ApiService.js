@@ -29,7 +29,7 @@ class ApiService {
     }
 
     registerAdmin(data) {
-        return this.api.post('/auth/register-admin', data);
+        return this.api.post('/admin/register', data);
     }
 
     getUserProfile() {

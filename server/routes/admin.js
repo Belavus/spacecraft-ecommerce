@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { getUsers, deleteUser, addProduct, deleteProduct, updateProduct } = require('../controllers/adminController');
 const { protect, admin } = require('../middlewares/authMiddleware');
+const {registerUser} = require("../controllers/adminController");
 
+router.route('/register')
+    .post(protect,admin,registerUser)
 router.route('/users')
     .get(protect, admin, getUsers);
 router.route('/users/:id')

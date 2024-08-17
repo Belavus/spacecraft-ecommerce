@@ -1,6 +1,51 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const {EMAIL_REGEX, PASSWORD_MIN_LENGTH} = require("../utils/constants");
+const generateToken = require("../utils/generateToken");
+
+//Register user
+const registerUser = asyncHandler(async (req, res) => {
+    const { name, email, password, isAdmin } = req.body;
+
+    // email validation
+    if (!EMAIL_REGEX.test(email)) {
+        res.status(400);
+        throw new Error('Invalid email format');
+    }
+
+    // password validation
+    if (password.length < PASSWORD_MIN_LENGTH) {
+        res.status(400);
+        throw new Error(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long`);
+    }
+
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
+
+    const user = await User.create({
+        name,
+        email,
+        password,
+        isAdmin,
+    });
+
+    if (user) {
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
+});
 
 // Get all users
 const getUsers = asyncHandler(async (req, res) => {
@@ -86,4 +131,4 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getUsers, deleteUser, addProduct, deleteProduct, updateProduct };
+module.exports = { registerUser, getUsers, deleteUser, addProduct, deleteProduct, updateProduct };

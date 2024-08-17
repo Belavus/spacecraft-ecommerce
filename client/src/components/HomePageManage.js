@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { TextField, Button, Typography } from '@mui/material';
+import {TextField, Button, Typography, Box} from '@mui/material';
 import apiService from '../services/ApiService';
 
 const HomePageManage = () => {
@@ -41,8 +41,7 @@ const HomePageManage = () => {
     };
 
     return (
-        <div>
-            <Typography variant="h6">Manage HomePage</Typography>
+        <Box>
             <TextField
                 label="Welcome Text"
                 value={welcomeText}
@@ -75,7 +74,7 @@ const HomePageManage = () => {
             <div style={{ marginTop: '16px' }}>
                 <Button variant="contained" color="primary" onClick={handleSaveChanges}>Save Changes</Button>
             </div>
-        </div>
+        </Box>
     );
 };
 

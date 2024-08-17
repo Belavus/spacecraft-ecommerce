@@ -1,7 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
-const Product = require('../models/Product');
 
 const placeOrder = asyncHandler(async (req, res) => {
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');

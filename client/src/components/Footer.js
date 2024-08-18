@@ -18,7 +18,7 @@ const Footer = () => {
         >
             <Stack>
                 <Typography>
-                    Copyright © Maksim Blaus 2024
+                    Copyright © Maksim Belavus 2024
                 </Typography>
                 <Stack alignItems='center' direction='row'><Typography variant="body2" sx={{marginRight: 1}}>
                     Connect with me:

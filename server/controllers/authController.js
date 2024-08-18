@@ -49,6 +49,18 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
+    // email validation
+    if (!EMAIL_REGEX.test(email)) {
+        res.status(400);
+        throw new Error('Invalid email format');
+    }
+
+    // password validation
+    if (password.length < PASSWORD_MIN_LENGTH) {
+        res.status(400);
+        throw new Error(`Password must be at least ${PASSWORD_MIN_LENGTH} characters long`);
+    }
+
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {

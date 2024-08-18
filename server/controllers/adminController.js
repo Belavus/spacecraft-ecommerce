@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 const {EMAIL_REGEX, PASSWORD_MIN_LENGTH} = require("../utils/constants");
 
 //Register user
@@ -95,18 +96,39 @@ const addProduct = asyncHandler(async (req, res) => {
     }
 });
 
-// Delete product
+// Delete product and remove it from carts
 const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
+        // delete product
         await Product.deleteOne({ _id: req.params.id });
-        res.json({ message: 'Product removed' });
+
+        // delete product from carts
+        await Cart.updateMany(
+            { 'items.product': req.params.id },
+            { $pull: { items: { product: req.params.id } } }
+        );
+
+        res.json({ message: 'Product removed and cleaned up from carts' });
     } else {
         res.status(404);
         throw new Error('Product not found');
     }
 });
+
+// Delete product
+// const deleteProduct = asyncHandler(async (req, res) => {
+//     const product = await Product.findById(req.params.id);
+//
+//     if (product) {
+//         await Product.deleteOne({ _id: req.params.id });
+//         res.json({ message: 'Product removed' });
+//     } else {
+//         res.status(404);
+//         throw new Error('Product not found');
+//     }
+// });
 
 // Update product
 const updateProduct = asyncHandler(async (req, res) => {

@@ -25,8 +25,8 @@ app.use(express.json());
 
 // Function to create an initial admin user
 const createAdminUser = async () => {
-    const adminEmail = 'admin@gmail.com';
-    const adminPassword = 'Maksimka1!';
+    const adminEmail = 'admin@mail.com';
+    const adminPassword = 'AdminPWD';
     const adminUser = await User.findOne({ email: adminEmail });
 
     if (!adminUser) {
